@@ -37,15 +37,21 @@ Three parts work together:
 
 This is a **writing-quality tool, not a verdict.** The patterns flagged here show up more often in LLM output, but humans on autopilot produce the same shapes, especially under deadline, in an unfamiliar genre, or in a second language. Independent audits put commercial AI-detector false-positive rates above 60% on non-native English writers, and adversarial paraphrase defeats almost every method. Treat a flag as a signal worth acting on, never as proof worth ruining someone's day over. Pair it with context: who wrote it, what genre, what their normal voice looks like.
 
+## Default: propose, then ask
+
+**Do not apply any change without confirmation.** This is the current default while the tool earns trust, and it overrides the modes below. Whatever the task, first surface what you would change: the flagged patterns with the offending text quoted, and the proposed rewrite or edits shown as a clear before/after. Then **stop and ask** whether to apply, using `AskUserQuestion` when you have edits ready to write.
+
+Never write to a file, overwrite text, or hand back a finished rewrite as the final word until the user approves. Err toward under-editing: when a flag is borderline, list it as optional rather than folding it into the proposed change. If the user later says to stop asking or to apply automatically, follow that, but the standing default is propose-and-wait.
+
 ## Modes
 
-**`rewrite`** (default) — flag the AI-isms, return a clean rewrite, then run a corrective second pass.
+**`rewrite`** (default) — flag the AI-isms and prepare a clean rewrite, then present it for approval before treating it as final.
 
 **`detect`** — flag only, no rewriting. Use when the writer wants to decide for themselves, the patterns might be intentional, or you are auditing text you should not alter (published work, someone else's writing).
 
-**`edit`** — edit a file in place with the Edit tool. Make minimal, targeted changes to the flagged spans only. Leave already-human passages alone. Do not touch quoted material, code blocks, or text attributed to someone else; flag those instead.
+**`edit`** — prepare minimal, targeted changes to the flagged spans only, **show them as before/after, and apply with the Edit tool only after the user confirms.** Leave already-human passages alone. Do not touch quoted material, code blocks, or text attributed to someone else; flag those instead.
 
-Trigger `detect` on "flag only", "audit", "scan", "what AI patterns are in this". Trigger `edit` when the writer names a file and asks you to fix it in place. Otherwise default to `rewrite`.
+Trigger `detect` on "flag only", "audit", "scan", "what AI patterns are in this". Trigger `edit` when the writer names a file and asks you to fix it in place. Otherwise default to `rewrite`. In every mode, the propose-then-ask rule above applies before anything is written or finalized.
 
 ## The job
 
@@ -89,11 +95,13 @@ Use P0+P1 for a quick pass; a full audit covers all three.
 
 ## Output
 
-**rewrite mode:** issues found (quoting the offending text), the rewritten version, what changed, and a second-pass audit that fixes anything still lingering. Include the five-dimension score and, when run, the detector score before and after.
+Present the proposal first, then ask before applying (see Default: propose, then ask).
 
-**detect mode:** issues found grouped by severity (P0/P1/P2), then an assessment noting which flags are clear problems versus judgment calls. If the text is clean, say so.
+**rewrite mode:** issues found (quoting the offending text), the proposed rewrite, and what would change, with the five-dimension score and, when run, the detector score before and after. Ask before treating the rewrite as final.
 
-**edit mode:** a short report of the edits made (location, before to after) and a verification that you re-read the file and the patterns are resolved. Not the full file.
+**detect mode:** issues found grouped by severity (P0/P1/P2), then an assessment noting which flags are clear problems versus judgment calls. No change is applied, so no confirmation is needed. If the text is clean, say so.
+
+**edit mode:** the proposed edits as a before/after list (with file location), then ask to apply. After the user confirms and you make the edits, give a short verification that the patterns are resolved. Not the full file.
 
 If a draft never clears 35/50 after a couple of passes, hand back the best version with a note on what is holding the score down rather than looping forever. Never inflate the score to escape the gate.
 

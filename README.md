@@ -110,12 +110,18 @@ whenever a task involves producing or cleaning prose and applies it in the
 background. There are no flags, slash commands, or controls to memorize; the
 behavior is driven by the agent's standing instructions and the task at hand.
 
+By default it **proposes and asks before changing anything**: it shows the flagged
+patterns and a before/after, then waits for your go-ahead rather than auto-applying.
+That default holds until you tell it to apply automatically, so it can earn trust
+without over-correcting.
+
 If you want a specific behavior, plain language is enough and the agent maps it
 to the right mode:
 
-- "clean this up" or "make it sound less like AI" → rewrite
-- "just flag what's off, don't change it" → detect
-- "fix the AI-isms in `draft.md` directly" → edit in place
+- "clean this up" or "make it sound less like AI" → rewrite (proposed, then confirmed)
+- "just flag what's off, don't change it" → detect (no changes at all)
+- "fix the AI-isms in `draft.md` directly" → edit in place (shown first, applied after you approve)
+- "stop asking, just apply" → switches off the confirmation gate
 
 Hand it a sample of your own writing and it matches your rhythm, word choice, and
 punctuation instead of producing generic clean copy.
