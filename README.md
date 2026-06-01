@@ -75,4 +75,62 @@ means nothing on its own. AIScrub looks for **clusters** of tells, not isolated 
 
 ```bash
 mkdir -p ~/.claude/skills
-git clone https://github.com/<your-username>/aiscrub.git ~/.claude/skills/aiscrub
+git clone https://github.com/HellWatcher/aiscrub.git ~/.claude/skills/aiscrub
+```
+
+OpenCode also scans `~/.claude/skills/`, so a single clone covers both tools.
+
+## Usage
+
+```
+/aiscrub
+
+[paste your text here]
+```
+
+Or ask directly: "Scrub the AI tells from this: [text]". To match your own
+voice, hand it a sample first:
+
+```
+/aiscrub
+
+Here's a sample of my writing for voice matching:
+[2-3 paragraphs of your own writing]
+
+Now scrub this:
+[the text]
+```
+
+You get back the final rewrite, a short "still reads as AI" audit, and the
+score across the five dimensions.
+
+## How it fits together
+
+```
+aiscrub/
+├── SKILL.md              # orchestrator: the calibrate -> rewrite -> audit -> score loop
+├── references/
+│   ├── patterns.md       # the detection catalog (42 patterns, merged)
+│   ├── scoring.md        # the scoring gate and quick checks
+│   └── examples.md       # before/after, including one full worked example
+├── README.md
+└── LICENSE
+```
+
+## Lineage
+
+AIScrub merges two existing skills and keeps faithful mirrors of each in this
+repository:
+
+- `blader/humanizer` — the Wikipedia-derived pattern catalog and voice work.
+  Mirrored on the **`mirror/humanizer`** branch.
+- `hardikpandya/stop-slop` — the scoring gate and the modular reference
+  structure. Mirrored on the **`mirror/stop-slop`** branch.
+
+The pattern catalog ultimately draws on
+[Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing),
+maintained by WikiProject AI Cleanup.
+
+## License
+
+MIT. Both upstream skills are MIT licensed.

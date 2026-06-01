@@ -1,0 +1,301 @@
+# Detection catalog
+
+Every pattern AIScrub looks for, with the fix for each. The catalog merges the
+Wikipedia-derived pattern list from `blader/humanizer` with the phrase and
+structure rules from `hardikpandya/stop-slop`. Scan for clusters, not isolated
+hits, and rewrite rather than delete.
+
+---
+
+## Phrasing
+
+### 1. Throat-clearing openers
+Announcement phrases that delay the point. State the content directly.
+
+Cut: "Here's the thing:", "Here's what/why/how [X]", "The uncomfortable truth is", "It turns out", "The real [X] is", "Let me be clear", "The truth is,", "I'm going to be honest", "Can we talk about", "In today's [X]", "In a world where", "When it comes to", "It's worth noting", "At the end of the day".
+
+Any "here's what/this/that" construction is throat-clearing. Cut it and state the point.
+
+### 2. Emphasis crutches
+Add no meaning. Delete them.
+
+"Full stop." / "Period." / "Let that sink in." / "Make no mistake" / "This matters because" / "Here's why that matters".
+
+### 3. Inflated vocabulary (AI words)
+These appear far more often in post-2023 text and tend to co-occur.
+
+Watch: actually, additionally, align with, crucial, delve, emphasizing, enduring, enhance, fostering, garner, highlight (verb), interplay, intricate/intricacies, key (adjective), landscape (abstract), pivotal, showcase, tapestry (abstract), testament, underscore (verb), valuable, vibrant.
+
+**Before:** Additionally, an enduring testament to Italian influence is the widespread adoption of pasta in the local culinary landscape, showcasing how these dishes integrated into the diet.
+**After:** Pasta dishes, introduced during Italian colonization, remain common, especially in the south.
+
+### 4. Business jargon
+Replace with plain language.
+
+| Avoid | Use |
+|---|---|
+| navigate (challenges) | handle, address |
+| unpack (analysis) | explain, examine |
+| lean into | accept, embrace |
+| landscape (context) | situation, field |
+| game-changer | significant |
+| double down | commit, increase |
+| deep dive | analysis |
+| take a step back | reconsider |
+| moving forward | next, from now |
+| circle back | return to |
+| on the same page | agreed |
+
+### 5. Adverbs and empty intensifiers
+Cut most adverbs. They add emphasis, not meaning.
+
+Frequent offenders: really, just, literally, genuinely, honestly, simply, actually, deeply, truly, fundamentally, inherently, inevitably, interestingly, importantly, crucially.
+
+### 6. Filler phrases
+Tighten.
+
+- "In order to achieve this goal" -> "To achieve this"
+- "Due to the fact that it was raining" -> "Because it was raining"
+- "At this point in time" -> "Now"
+- "In the event that you need help" -> "If you need help"
+- "The system has the ability to process" -> "The system can process"
+- "It is important to note that the data shows" -> "The data shows"
+
+### 7. Excessive hedging
+Stop over-qualifying.
+
+**Before:** It could potentially possibly be argued that the policy might have some effect on outcomes.
+**After:** The policy may affect outcomes.
+
+### 8. Persuasive authority tropes
+These pretend to cut through noise to a deeper truth, then restate an ordinary point with ceremony.
+
+Watch: "The real question is", "at its core", "in reality", "what really matters", "fundamentally", "the deeper issue", "the heart of the matter".
+
+**Before:** The real question is whether teams can adapt. At its core, what really matters is organizational readiness.
+**After:** Whether teams adapt mostly depends on whether the organization is ready to change its habits.
+
+### 9. Meta-commentary and signposting
+The text announces what it will do instead of doing it. Delete it and let the writing move.
+
+Watch: "Let's dive in", "let's explore", "let's break this down", "here's what you need to know", "without further ado", "Hint:", "Plot twist:", "The rest of this essay explains...", "In this section, we'll...", "As we'll see...".
+
+---
+
+## Structure
+
+### 10. Rule of three
+LLMs force ideas into groups of three to look comprehensive. Two items beat three.
+
+**Before:** The event features keynote sessions, panel discussions, and networking opportunities. Attendees can expect innovation, inspiration, and industry insights.
+**After:** The event includes talks and panels, with time for informal networking between sessions.
+
+### 11. Binary contrasts
+False drama through a telegraphed reversal. State the point directly and drop the negation.
+
+Patterns: "Not because X, but because Y", "[X] isn't the problem. [Y] is.", "The answer isn't X. It's Y.", "It feels like X. It's actually Y.", "not just X but also Y", "stops being X and starts being Y".
+
+**Before:** It's not just about the beat riding under the vocals; it's part of the aggression and atmosphere.
+**After:** The heavy beat adds to the aggressive tone.
+
+### 12. Negative listing
+Listing what something is *not* before revealing what it *is*. A rhetorical striptease.
+
+Patterns: "Not a X... Not a Y... A Z.", "It wasn't X. It wasn't Y. It was Z." State Z. The reader does not need the runway.
+
+### 13. Dramatic fragmentation
+Sentence fragments for emphasis read as manufactured profundity.
+
+Patterns: "[Noun]. That's it. That's the [thing].", "X. And Y. And Z.", "This unlocks something. [Word]." Use complete sentences and trust the content.
+
+### 14. Rhetorical setups
+Announce insight rather than deliver it.
+
+Patterns: "What if [reframe]?", "Here's what I mean:", "Think about it:", "And that's okay." Make the point and let readers draw the conclusion.
+
+### 15. Outline-like "Challenges and Future Prospects" sections
+Formulaic filler sections. Replace with specific facts.
+
+**Before:** Despite its prosperity, the town faces challenges typical of urban areas. Despite these challenges, it continues to thrive.
+**After:** Traffic congestion rose after 2015 when three IT parks opened. The municipality began a drainage project in 2022 to address recurring floods.
+
+### 16. False ranges
+"From X to Y" where X and Y are not on a real scale.
+
+**Before:** Our journey takes us from the singularity of the Big Bang to the grand cosmic web, from the birth of stars to the dance of dark matter.
+**After:** The book covers the Big Bang, star formation, and current theories about dark matter.
+
+### 17. Elegant variation (synonym cycling)
+Repetition-penalty habits drive needless synonym swaps for the same referent.
+
+**Before:** The protagonist faces challenges. The main character overcomes obstacles. The central figure triumphs. The hero returns home.
+**After:** The protagonist faces many challenges but eventually triumphs and returns home.
+
+### 18. Fragmented headers
+A heading followed by a one-line paragraph that restates the heading before the real content.
+
+**Before:** ## Performance / Speed matters. / When users hit a slow page, they leave.
+**After:** ## Performance / When users hit a slow page, they leave.
+
+---
+
+## Voice and stance
+
+### 19. Passive voice and subjectless fragments
+Every sentence needs an actor doing something. Passive voice hides the actor and drains energy.
+
+"X was created" -> name who created it. "It is believed that" -> name who believes it. "No configuration file needed" -> "You do not need a configuration file."
+
+### 20. False agency
+Inanimate things given human verbs. A person makes those things happen; AI loves this because it avoids naming the actor.
+
+| Pattern | Why it is wrong |
+|---|---|
+| "a complaint becomes a fix" | someone fixed it |
+| "the decision emerges" | someone decided |
+| "the culture shifts" | people changed behavior |
+| "the data tells us" | someone read it and drew a conclusion |
+| "the market rewards" | buyers paid for something |
+
+Name the human. If none fits, use "you" to put the reader in the seat.
+
+### 21. Narrator-from-a-distance
+Floating above the scene instead of putting the reader in it.
+
+Patterns: "Nobody designed this.", "This happens because...", "People tend to...". Put the reader in the room: "You don't sit down one day and decide to..." beats "Nobody designed this."
+
+### 22. Wh- sentence starters
+Sentences opening with What, When, Where, Which, Who, Why, How become a crutch.
+
+**Before:** What makes this hard is the constraint.
+**After:** The constraint is [name it].
+
+### 23. Vague attributions and weasel words
+Opinions pinned to vague authorities with no source.
+
+**Before:** Experts believe it plays a crucial role in the regional ecosystem.
+**After:** The river supports several endemic fish species, according to a 2019 survey by the Chinese Academy of Sciences.
+
+### 24. Vague declaratives
+Announcing importance without naming the specific thing.
+
+Cut or replace with the specific thing: "The reasons are structural", "The implications are significant", "The stakes are high", "The consequences are real".
+
+### 25. Lazy extremes
+Sweeping absolutes used for false authority: every, always, never, everyone, everybody, nobody. Use specifics.
+
+### 26. Superficial -ing analyses
+Present-participle phrases tacked on to fake depth.
+
+Watch: highlighting/underscoring/emphasizing..., ensuring..., reflecting/symbolizing..., contributing to..., showcasing...
+
+**Before:** The palette resonates with the region's beauty, symbolizing the bluebonnets and the Gulf, reflecting the community's connection to the land.
+**After:** The architect chose blue, green, and gold to reference local bluebonnets and the Gulf coast.
+
+### 27. Copula avoidance
+Elaborate constructions standing in for "is" / "are".
+
+"serves as / stands as / boasts / features" -> "is / has".
+
+### 28. Promotional language
+Trouble holding a neutral tone, especially for "heritage" topics.
+
+Watch: boasts a, vibrant, rich (figurative), nestled, in the heart of, renowned, breathtaking, must-visit, stunning.
+
+**Before:** Nestled within the breathtaking region of Gonder, the town stands as a vibrant place with rich cultural heritage.
+**After:** The town is in the Gonder region of Ethiopia, known for its weekly market and 18th-century church.
+
+### 29. Significance inflation
+Puffing up importance by tying arbitrary details to broader trends.
+
+Watch: stands/serves as, is a testament, a pivotal/crucial moment, marking a shift, evolving landscape, setting the stage for, leaving an indelible mark.
+
+**Before:** The institute was established in 1989, marking a pivotal moment in the evolution of regional statistics.
+**After:** The institute was established in 1989 to publish regional statistics independently from the national office.
+
+### 30. Notability name-dropping
+Listing outlets and follower counts to assert importance.
+
+**Before:** Her views have been cited in the NYT, BBC, FT, and The Hindu. She has over 500,000 followers.
+**After:** In a 2024 New York Times interview, she argued that AI regulation should focus on outcomes rather than methods.
+
+---
+
+## Tone and communication
+
+### 31. Chatbot artifacts
+Correspondence pasted as content. Remove entirely.
+
+"I hope this helps!", "Of course!", "Certainly!", "You're absolutely right!", "Would you like...", "let me know", "here is a...".
+
+### 32. Sycophantic tone
+Overly positive, people-pleasing language.
+
+**Before:** Great question! You're absolutely right that this is complex. Excellent point about the economics.
+**After:** The economic factors you mentioned are relevant here.
+
+### 33. Knowledge-cutoff disclaimers and speculative gap-filling
+Two related tells: leftover cutoff disclaimers, and inventing plausible filler when no source is found.
+
+Watch: "as of [date]", "based on available information", "not publicly available", "maintains a low profile", "keeps personal details private", "likely [grew up/studied]", "it is believed that".
+
+**Before:** Information about her early life is not publicly available, suggesting she maintains a low profile. She likely grew up in a middle-class household.
+**After:** Her early life is not documented in the available sources. (Or cut the section.)
+
+### 34. Generic positive conclusions
+Vague upbeat endings.
+
+**Before:** The future looks bright. Exciting times lie ahead as they continue their journey toward excellence.
+**After:** The company plans to open two more locations next year.
+
+---
+
+## Style
+
+### 35. Em dashes and en dashes: cut them
+The final rewrite contains no em dashes or en dashes. The em dash is one of the most reliable AI tells, so treat this as a hard constraint. Replace each, in rough order of preference: a period, a comma, a colon, parentheses, or restructure. Also catch spaced em dashes ( — ) and double hyphens ( -- ). Scan the final draft for these before delivering.
+
+**Before:** The policy, announced without warning, affects thousands of workers. The changes -- long overdue -- take effect now.
+**After:** The policy, announced without warning, affects thousands of workers. The changes, long overdue, take effect now.
+
+### 36. Boldface overuse
+AI emphasizes phrases in bold mechanically.
+
+**Before:** It blends **OKRs**, **KPIs**, and tools like the **Business Model Canvas**.
+**After:** It blends OKRs, KPIs, and tools like the Business Model Canvas.
+
+### 37. Inline-header vertical lists
+List items that start with a bold header and a colon.
+
+**Before:** - **Performance:** Performance improved through optimized algorithms.
+**After:** The update speeds up load times through optimized algorithms.
+
+### 38. Title case in headings
+AI capitalizes every main word.
+
+**Before:** ## Strategic Negotiations And Global Partnerships
+**After:** ## Strategic negotiations and global partnerships
+
+### 39. Emojis
+Decorative emoji on headings or bullets.
+
+**Before:** 🚀 **Launch Phase:** The product launches in Q3
+**After:** The product launches in Q3.
+
+### 40. Curly quotation marks
+ChatGPT uses curly quotes instead of straight ones. (Only a tell when stacked with others; most editors auto-curl.)
+
+**Before:** He said “the project is on track.”
+**After:** He said "the project is on track."
+
+### 41. Hyphenated word-pair overuse
+AI hyphenates compounds uniformly, including in predicate position. Keep the hyphen when the compound is attributive; drop it when it follows the noun.
+
+**Before:** The team is cross-functional, the report is high-quality, the method is data-driven.
+**After:** The team is cross functional, the report is high quality, the method is data driven.
+
+### 42. Diff-anchored writing
+Documentation written as if narrating a change rather than describing the thing as it is. Unless the document is version-scoped (changelogs, release notes), it should read coherently without knowing the last commit.
+
+**Before:** This function was added to replace the previous approach of iterating through all items, which caused O(n²) performance.
+**After:** This function uses a hash map for O(1) lookups, avoiding the O(n²) cost of naive iteration.
