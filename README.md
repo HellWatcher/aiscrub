@@ -96,29 +96,22 @@ git clone https://github.com/HellWatcher/aiscrub.git ~/.claude/skills/aiscrub
 
 OpenCode also scans `~/.claude/skills/`, so a single clone covers both tools.
 
-## Usage
+## How it's used
 
-```
-/aiscrub
+AIScrub runs on its own, not through a command. The agent loads the skill
+whenever a task involves producing or cleaning prose and applies it in the
+background. There are no flags, slash commands, or controls to memorize; the
+behavior is driven by the agent's standing instructions and the task at hand.
 
-[paste your text here]
-```
+If you want a specific behavior, plain language is enough and the agent maps it
+to the right mode:
 
-Or ask directly: "Scrub the AI tells from this: [text]". To match your own
-voice, hand it a sample first:
+- "clean this up" or "make it sound less like AI" → rewrite
+- "just flag what's off, don't change it" → detect
+- "fix the AI-isms in `draft.md` directly" → edit in place
 
-```
-/aiscrub
-
-Here's a sample of my writing for voice matching:
-[2-3 paragraphs of your own writing]
-
-Now scrub this:
-[the text]
-```
-
-You get back the final rewrite, a short "still reads as AI" audit, and the
-score across the five dimensions.
+Hand it a sample of your own writing and it matches your rhythm, word choice, and
+punctuation instead of producing generic clean copy.
 
 ## How it fits together
 
