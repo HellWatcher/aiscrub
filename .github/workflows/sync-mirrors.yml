@@ -1,0 +1,66 @@
+name: Sync mirror branches
+
+# Keeps the mirror/* branches in lockstep with their upstream skills.
+# Each mirror branch is a faithful copy of an upstream repo, so this force-updates
+# the branch to whatever the upstream's default branch currently points at.
+#
+# Note: scheduled runs only fire when this file lives on the repository's default
+# branch. Until then, run it by hand from the Actions tab (workflow_dispatch).
+
+on:
+  schedule:
+    # Daily at 06:00 UTC.
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-mirror-branches
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: humanizer
+            upstream: https://github.com/blader/humanizer.git
+            upstream_branch: main
+            mirror: mirror/humanizer
+          - name: stop-slop
+            upstream: https://github.com/hardikpandya/stop-slop.git
+            upstream_branch: main
+            mirror: mirror/stop-slop
+    steps:
+      - name: Checkout (configures credentials for pushing to origin)
+        uses: actions/checkout@v4
+
+      - name: Sync ${{ matrix.mirror }} from ${{ matrix.upstream }}
+        run: |
+          set -euo pipefail
+
+          git remote add upstream "${{ matrix.upstream }}"
+          # Full history, so the mirror stays a true mirror rather than a snapshot.
+          git fetch --no-tags upstream "${{ matrix.upstream_branch }}"
+
+          new="$(git rev-parse FETCH_HEAD)"
+          old="$(git ls-remote origin "refs/heads/${{ matrix.mirror }}" | cut -f1)"
+
+          if [ "$old" = "$new" ]; then
+            echo "✅ ${{ matrix.mirror }} already matches upstream ($new). Nothing to do." >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+
+          git push origin "FETCH_HEAD:refs/heads/${{ matrix.mirror }}" --force
+
+          {
+            echo "### ${{ matrix.mirror }} updated"
+            echo ""
+            echo "- upstream: \`${{ matrix.upstream }}\` (\`${{ matrix.upstream_branch }}\`)"
+            echo "- was: \`${old:-<absent>}\`"
+            echo "- now: \`$new\`"
+          } >> "$GITHUB_STEP_SUMMARY"

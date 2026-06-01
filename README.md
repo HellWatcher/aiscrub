@@ -131,6 +131,12 @@ The pattern catalog ultimately draws on
 [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing),
 maintained by WikiProject AI Cleanup.
 
+The mirrors stay current through
+[`.github/workflows/sync-mirrors.yml`](.github/workflows/sync-mirrors.yml),
+which fetches each upstream daily and force-updates its mirror branch. Trigger
+it by hand any time from the Actions tab. Scheduled runs start once the workflow
+lands on the default branch.
+
 ## License
 
 MIT. Both upstream skills are MIT licensed.
