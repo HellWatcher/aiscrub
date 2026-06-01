@@ -47,22 +47,34 @@ and do not inflate the score to escape the gate.
 ## The deterministic detector
 
 The five-dimension gate is a judgment call. Pair it with the regex detector for a
-repeatable number that does not drift between runs. From the repo root:
+repeatable number that does not drift between runs. The quickest path is the CLI:
+
+```
+node detector/cli.js draft.md            # human-readable score + issue counts
+node detector/cli.js draft.md --json     # structured: score, classification, issues[]
+node detector/cli.js draft.md --fail-over=40   # exit 1 if score > 40 (for scripts/CI)
+```
+
+Or call the library directly from the repo root:
 
 ```js
 const AIDetector = require("./detector/patterns.js");
 const r = AIDetector.analyzeText(text); // optionally { contextMode: "technical" }
-console.log(r.score, r.label, r.document_classification, r.issues.length);
 ```
 
 `score` is 0-100 (0 clean, 100 heavy AI), `label` is Minimal/Some/Strong/Heavy,
 `document_classification` is HUMAN_ONLY / MIXED / AI_ONLY, and `issues[]` lists
 each hit with its `type` and `severity`. The engine is false-negative biased:
 MIXED is wide and AI_ONLY needs several corroborating signals, so a flag is a
-prompt to look, not a conviction. Run it on the source for a baseline and again on
-the final rewrite to confirm the score actually dropped. See
-[../detector/README.md](../detector/README.md) for the full result shape and
-`npm test` to validate the engine.
+prompt to look, not a conviction (the eval in `eval/` measures this: 0% false
+positives on the human samples).
+
+**Run order.** Score *first* as a pre-filter. If the source is `HUMAN_ONLY` with
+a low score and no P0 issues, it is already clean; skip or lighten the rewrite
+rather than paying for a full pass. Otherwise rewrite, then re-score the final
+text to confirm the number dropped. See [catalog-map.md](catalog-map.md) for
+which patterns the detector backs versus the judgment-only ones, and
+[../detector/README.md](../detector/README.md) for the full result shape.
 
 ## Severity triage
 

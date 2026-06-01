@@ -1,0 +1,21 @@
+name: checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      # Detector engine fixtures + CATEGORIES.md contract.
+      - run: npm test
+      # Catalog size matches the README in every spot.
+      - run: npm run check-counts
+      # Detector eval: fail if it starts false-accusing humans.
+      - run: npm run eval -- --max-fp=0.15

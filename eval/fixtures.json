@@ -1,0 +1,82 @@
+[
+  {
+    "id": "ai-01-heritage",
+    "label": "ai",
+    "text": "Nestled within the breathtaking foothills, the vibrant town of Eldoria stands as a testament to the enduring spirit of its people. This groundbreaking community boasts a rich tapestry of cultural heritage, showcasing the intricate interplay of tradition and progress. In today's rapidly evolving landscape, Eldoria continues to thrive, marking a pivotal moment in the region's storied evolution and underscoring its commitment to excellence."
+  },
+  {
+    "id": "ai-02-product",
+    "label": "ai",
+    "text": "It's not just a database. It's a paradigm shift. Our cutting-edge platform leverages robust, scalable architecture to deliver seamless performance. Whether you're a startup founder or an enterprise architect, this game-changer empowers your team to unlock unprecedented value. The future looks bright, and only time will tell how transformative this journey will be. Let's dive in."
+  },
+  {
+    "id": "ai-03-essay",
+    "label": "ai",
+    "text": "It's worth noting that artificial intelligence is reshaping our world. Moreover, the implications are significant. Furthermore, experts believe that the technology will continue to evolve. Additionally, studies show that adoption is accelerating. At its core, what really matters is how we navigate this complex landscape. In conclusion, the future of AI remains both exciting and uncertain."
+  },
+  {
+    "id": "ai-04-chatbot",
+    "label": "ai",
+    "text": "Great question! I hope this helps. Here's an overview of the French Revolution. The French Revolution serves as a pivotal moment in history, symbolizing the enduring struggle for liberty and underscoring the profound impact of social change. It highlights the intricate interplay of politics and economics. Let me know if you'd like me to expand on any section!"
+  },
+  {
+    "id": "ai-05-linkedin",
+    "label": "ai",
+    "text": "Here's the thing: most leaders get this wrong. They focus on tactics. Not strategy. Let that sink in. The uncomfortable truth is that real leadership isn't about authority, it's about influence. What if I told you the best teams optimize for learning? Think about it. The future of work is here. #Leadership #Innovation #FutureOfWork #Growth #Mindset #Success #AI"
+  },
+  {
+    "id": "ai-06-bio",
+    "label": "ai",
+    "text": "While specific details about her early life are limited based on available information, she appears to maintain a relatively low profile. She likely began her career in the bustling tech sector, where she would foster innovation and cultivate a thriving network. Her work continues to resonate, contributing to the broader conversation and leaving an indelible mark on the industry."
+  },
+  {
+    "id": "ai-07-review",
+    "label": "ai",
+    "text": "I recently had the pleasure of exploring this remarkable product, and it truly hits different. The user experience is seamless, the design is sleek, and the performance is exceptional. It's a comprehensive solution that delves into every detail. The catch? There isn't one. This is a must-have that showcases what modern engineering can achieve. Highly recommend!"
+  },
+  {
+    "id": "ai-08-corp",
+    "label": "ai",
+    "text": "Moving forward, we need to lean into discomfort and navigate uncertainty with clarity. Let's circle back on the deliverables and make sure we're all on the same page. This initiative is a game-changer that will elevate our synergy and empower stakeholders. At the end of the day, what matters is that we double down on our commitment to delivering best-in-class outcomes."
+  },
+  {
+    "id": "human-01-blog",
+    "label": "human",
+    "text": "I bought the cheapest espresso machine I could find, a 39-dollar Mr. Coffee from 2014, and it lasted exactly three weeks before the pump died. So I did what any reasonable person does: I spent four hours on a forum arguing with strangers about boiler temperature, then bought a used Gaggia for 200 bucks off a guy named Dave in Tacoma. It leaks a little. I don't care. The coffee is better than the cafe down my street, and that cafe charges six dollars."
+  },
+  {
+    "id": "human-02-technical",
+    "label": "human",
+    "text": "The migration script ran fine in staging and then ate 40 minutes in production because the index on user_events was never created there. We caught it when the on-call pager went off at 2am. Fix was a one-line CREATE INDEX CONCURRENTLY, but we had to wait for the lock to clear first. Lesson: staging had 10k rows, prod had 90 million. Sample data lies."
+  },
+  {
+    "id": "human-03-opinion",
+    "label": "human",
+    "text": "Honestly I'm torn on remote work. The commute was awful and I don't miss it. But I learned more in my first year sitting next to senior engineers than I did in the two years after we went fully remote. Maybe that's just me, or maybe junior people need the accidental overhearing that an office gives you. I keep going back and forth and I don't have a clean answer."
+  },
+  {
+    "id": "human-04-terse",
+    "label": "human",
+    "text": "Rain again. The dog refuses to go out, so we're at a standstill. I made soup. It needed salt, then needed more salt, then I added too much and had to throw in a potato to soak it up. My grandmother's trick. Worked. The dog still won't go out."
+  },
+  {
+    "id": "human-05-historical",
+    "label": "human",
+    "text": "The Erie Canal opened in 1825 and cut the cost of moving a ton of freight from Buffalo to New York City from about a hundred dollars to under ten. Towns sprang up along the route. Buffalo grew from a village to a real city in a decade. The canal was obsolete within fifty years once railroads spread, but by then it had already redrawn the map of the state."
+  },
+  {
+    "id": "human-06-note",
+    "label": "human",
+    "text": "Quick note before I forget: the client wants the invoice numbers to start at 1001, not 1, because their old system used four digits and accounting will throw a fit otherwise. Also they pay net-60, not net-30, so don't promise the contractors faster than that. I learned this the hard way last quarter."
+  },
+  {
+    "id": "human-07-review",
+    "label": "human",
+    "text": "Hiked Cascade Pass on Saturday. The trailhead lot was full by 7:30 so get there early. Snow above the switchbacks even in July, and I post-holed up to my knee twice before giving up on the Sahale arm. Marmots everywhere. One of them tried to eat my trekking pole strap while I had lunch. Bring more water than you think; the streams up high were dry."
+  },
+  {
+    "id": "human-08-email",
+    "label": "human",
+    "text": "Hi Sam, thanks for sending the draft over. I read it on the train this morning. Two things: the second section repeats a chunk of the intro almost word for word, so I'd cut one of them. And the chart on page 4 has the axes swapped, which had me confused for a good minute. Otherwise it's in good shape. Happy to jump on a call tomorrow if that's easier."
+  }
+]

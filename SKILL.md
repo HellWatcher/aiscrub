@@ -49,7 +49,7 @@ Trigger `detect` on "flag only", "audit", "scan", "what AI patterns are in this"
 
 ## The job
 
-1. **Scan.** Read the text against the catalog in [references/patterns.md](references/patterns.md). For a repeatable baseline, run the detector: `node detector/patterns.js` is library-only, so use the snippet in [detector/README.md](detector/README.md) or `Bash` to call `analyzeText`. Look for clusters, not isolated hits.
+1. **Scan, and pre-filter.** Run the detector first for a cheap, repeatable baseline: `node detector/cli.js <file>` (or pipe text to it; add `--json` for structured output, `--technical` for code-adjacent prose). Use it as a gate: if the classification is `HUMAN_ONLY` with a low score and no P0 issues, the text is already clean, so skip the rewrite or do only a light targeted pass and stop. Spend the expensive loop only on text that needs it. Then read the flagged text against the catalog in [references/patterns.md](references/patterns.md), looking for clusters, not isolated hits.
 2. **Rewrite, don't delete.** Replace each AI-ism with a natural alternative and cover everything the original covered. If the source has five paragraphs of content, the rewrite has five.
 3. **Keep the meaning and the register.** Match the intended tone. Add personality only when the content calls for it (see Personality and soul).
 4. **Score and gate.** Rate the rewrite with [references/scoring.md](references/scoring.md). Below 35/50 goes back for another pass.

@@ -129,21 +129,28 @@ aiscrub/
 │   ├── patterns.md       # the detection catalog (68 patterns, tiered vocab)
 │   ├── scoring.md        # the scoring gate, the detector, and severity triage
 │   ├── profiles.md       # context + voice profiles and the tolerance matrix
+│   ├── catalog-map.md    # which patterns the detector backs vs. judgment-only
 │   └── examples.md       # before/after, including one full worked example
 ├── detector/
 │   ├── patterns.js       # the deterministic regex + stylometry engine
+│   ├── cli.js            # `node detector/cli.js <file>` to score text
 │   ├── patterns.test.js  # fixtures (run with `npm test`)
 │   ├── categories.test.js
 │   ├── CATEGORIES.md     # rule <-> detector-category mapping
 │   └── README.md
-├── package.json          # `npm test` runs the detector suites
-├── .github/workflows/    # sync-mirrors + detector CI
+├── eval/                 # labeled corpus + `npm run eval` (precision/recall/FP-rate)
+├── scripts/              # `npm run check-counts` catalog-size guard
+├── package.json
+├── .github/workflows/    # checks (test + guard + eval) and sync-mirrors
 ├── README.md
 └── LICENSE
 ```
 
-Run the detector with `npm test` (zero dependencies, Node >=18); CI runs it on
-every change under `detector/`.
+Tooling is zero-dependency Node (>=18). `npm test` runs the detector fixtures,
+`npm run check-counts` guards the catalog size, and `npm run eval` reports the
+detector's precision, recall, and false-positive rate against a labeled set. CI
+runs all three on every push. Score any text directly with
+`node detector/cli.js <file>`.
 
 ## Lineage
 
