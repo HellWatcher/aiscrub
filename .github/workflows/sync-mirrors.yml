@@ -35,6 +35,10 @@ jobs:
             upstream: https://github.com/hardikpandya/stop-slop.git
             upstream_branch: main
             mirror: mirror/stop-slop
+          - name: avoid-ai-writing
+            upstream: https://github.com/conorbronsdon/avoid-ai-writing.git
+            upstream_branch: main
+            mirror: mirror/avoid-ai-writing
     steps:
       - name: Checkout (configures credentials for pushing to origin)
         uses: actions/checkout@v4

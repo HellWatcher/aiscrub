@@ -21,10 +21,14 @@ Add no meaning. Delete them.
 
 "Full stop." / "Period." / "Let that sink in." / "Make no mistake" / "This matters because" / "Here's why that matters".
 
-### 3. Inflated vocabulary (AI words)
-These appear far more often in post-2023 text and tend to co-occur.
+### 3. Inflated vocabulary (tiered)
+AI words appear far more often in post-2023 text and tend to co-occur. Flag by tier, not as a flat blocklist, so a single ordinary word in isolation does not get gutted. Tiering is adapted from `conorbronsdon/avoid-ai-writing`.
 
-Watch: actually, additionally, align with, crucial, delve, emphasizing, enduring, enhance, fostering, garner, highlight (verb), interplay, intricate/intricacies, key (adjective), landscape (abstract), pivotal, showcase, tapestry (abstract), testament, underscore (verb), valuable, vibrant.
+**Tier 1, always replace.** 5-20x more common in AI text. Replace on sight: delve, landscape (metaphor), tapestry, realm, paradigm, embark, beacon, testament to, robust, comprehensive, cutting-edge, leverage (verb), pivotal, underscores, meticulous, seamless, game-changer, utilize, nestled, vibrant, thriving, showcasing, deep dive, unpack, intricate/intricacies, ever-evolving, enduring, daunting, holistic, actionable, impactful, learnings, thought leader, best practices, at its core, synergy, interplay, in order to, due to the fact that, serves as, boasts, commence, endeavor, embrace (metaphor).
+
+**Tier 2, flag when 2+ appear in one paragraph.** Fine alone, a tell in pairs: harness, navigate, foster, elevate, unleash, streamline, empower, bolster, spearhead, resonate, revolutionize, facilitate, underpin, nuanced, crucial, multifaceted, ecosystem (metaphor), myriad, plethora, encompass, catalyze, reimagine, galvanize, augment, cultivate, illuminate, elucidate, cornerstone, paramount, poised, burgeoning, nascent, quintessential, overarching.
+
+**Tier 3, flag only at high density (~3%+ of words).** Normal words AI overuses: significant, innovative, effective, dynamic, scalable, compelling, unprecedented, exceptional, remarkable, sophisticated, instrumental, world-class, state-of-the-art.
 
 **Before:** Additionally, an enduring testament to Italian influence is the widespread adoption of pasta in the local culinary landscape, showcasing how these dishes integrated into the diet.
 **After:** Pasta dishes, introduced during Italian colonization, remain common, especially in the south.
@@ -299,3 +303,65 @@ Documentation written as if narrating a change rather than describing the thing 
 
 **Before:** This function was added to replace the previous approach of iterating through all items, which caused O(n²) performance.
 **After:** This function uses a hash map for O(1) lookups, avoiding the O(n²) cost of naive iteration.
+
+---
+
+## Fingerprints and newer patterns
+
+These are mostly from `conorbronsdon/avoid-ai-writing`. The first three are
+*fingerprints*: their presence is near-proof the text was pasted from a chat
+tool, regardless of how the surrounding prose reads. Strip them mechanically.
+
+### 43. Chatbot citation-markup leaks
+Internal citation tokens that survive copy-paste from chat UIs: `citeturn0search0`, `contentReference[oaicite:0]{index=0}`, `oai_citation`, `[attached_file:1]`, `grok_card`. Delete every token. If a citation was meaningful, replace it with a real reference.
+
+### 44. AI-tool URL parameters
+Tracking params AI tools append to URLs: `utm_source=chatgpt.com`, `utm_source=copilot.com`, `utm_source=claude.ai`, `utm_source=perplexity.ai`, `referrer=grok.com`. Strip the parameter; keep the URL if the link matters.
+
+### 45. Unfilled placeholders
+Bracketed slot-fillers shipped unedited: `[Your Name]`, `[INSERT SOURCE URL]`, `[Describe the section]`, `2025-XX-XX`, `<!-- add citation -->`. Treat any visible placeholder as a publishing bug: fill it with real content or delete the sentence.
+
+### 46. Parataxis (no connective tissue)
+Chaining short declaratives because that is easier than building a thought: "Short sentence. Then another. Then another." Connect related ideas with subordinate clauses, conjunctions, or punctuation that shows how they relate (cause, contrast, qualification).
+
+**Before:** The build failed. The cache was stale. We cleared it. It passed.
+**After:** The build failed because the cache was stale, so we cleared it and it passed.
+
+### 47. Hashtag stuffing
+Six or more hashtags on a short post, usually mixing a specific tag with broad category tags (#AI #Crypto #Innovation #FutureTech). Cut to two or three specific tags, or none. A hashtag that would not help a reader find related work is filler.
+
+### 48. Novelty inflation
+Treating established ideas as if the subject invented them: "He coined the phrase", "a concept nobody's naming", "the failure mode nobody talks about". Describe what the person *did with* the idea, not that they discovered it. Assume an idea is not novel unless you can confirm it.
+
+### 49. Emotional flatline
+Claiming an emotion as a crutch instead of conveying it: "What surprised me most", "I was fascinated to discover", "What struck me was", and the bare header form "Interesting part:". If a thing is surprising, the reader should feel it from the content. Cut the claim and present the thing.
+
+### 50. Self-labeling significance
+Pointing back at an item and labeling it for the reader: "That last move is the contrarian one", "This is the interesting part", "Here's where it gets clever". If a move is genuinely contrarian, the description shows it. Cut the label and let the explanation do the work, or lead with the item you wanted to highlight.
+
+### 51. Reasoning-chain artifacts
+Chain-of-thought scaffolding leaking into prose: "Let me think step by step", "Breaking this down", "To approach this systematically", "First, let's consider". The reader does not need the scaffolding. State the conclusion, then the evidence.
+
+### 52. Infomercial engagement hooks
+Fragment-hooks teeing up a reveal: "The catch?", "The kicker?", "Here's the thing.", "The best part?", "Plot twist:". Delete the hook and state the thing. "The catch? It only works on weekends." becomes "It only works on weekends."
+
+### 53. Rhetorical-question openers
+Questions used to stall before the point: "But what does this mean for developers?", "So why should you care?", "What's next?". If you know the answer, say it. A rhetorical question is earned by strong setup, not dropped as a section transition.
+
+### 54. False concession
+"While X is impressive, Y remains a challenge" used to sound balanced without weighing anything, when both halves are vague. Make the concession specific (name what is impressive, name the actual challenge) or pick a side and argue it.
+
+### 55. Confidence-calibration phrases
+Words that tell the reader how to feel about a fact instead of letting it speak: "It's worth noting that", "Interestingly", "Notably", "Importantly", "Undoubtedly". One in 2,000 words is fine; three in 500 is emphasis-stacking. Flag by density.
+
+### 56. Excessive structure
+More than three headings in under 300 words, or 8+ bullets in under 200 words, is AI trying to look organized. Merge sections or use prose. Also flag default scaffolding headers ("Overview", "Key Points", "Summary", "Conclusion"); use headers that say something specific.
+
+### 57. Numbered-list inflation
+"Three key takeaways", "Five things to know", "the top seven". Use a numbered list only when the content genuinely has that many discrete parallel items. Padding to hit a number means the list should not exist.
+
+### 58. Low information density (treadmill)
+Restating the premise in fresh words instead of advancing it: lots of motion, no distance. The tell is that you could cut 40-60% and lose nothing. For each paragraph, name the one fact, claim, or turn it adds; if there is none, cut it.
+
+### 59. Vocabulary uniformity (stylometric)
+On general prose over ~200 words, a very low type-token ratio (distinct words / total words, below ~0.40) signals a model locked on a small vocabulary loop. Human prose usually lands 0.50-0.65. The fix is not a thesaurus pass; it is to broaden the *what*: name specific things, cite specific cases, replace a re-used abstract noun with the concrete instance behind it. (Narrow technical topics and second-language writing legitimately compress vocabulary, so treat low TTR as a prompt to look, not a verdict.)

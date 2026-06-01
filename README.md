@@ -2,12 +2,15 @@
 
 A Claude Code skill that removes the tells of AI-generated writing and leaves your voice intact.
 
-AIScrub combines two approaches that usually live in separate tools:
+AIScrub combines three approaches that usually live in separate tools:
 
 1. **A detection catalog** that names specific AI patterns and rewrites each one.
 2. **A scoring gate** that rates the result and sends weak prose back for another pass.
+3. **A deterministic detector** (`detector/patterns.js`) that scores text by regex and stylometry, so the verdict is repeatable instead of vibes.
 
-Catch the patterns, then prove the fix worked. One pass, two checks.
+Catch the patterns, prove the fix worked, then check the number. It also runs in
+three modes (`rewrite`, `detect`, `edit`) and adapts strictness to the audience
+through context and voice profiles.
 
 ## Why this exists
 
@@ -16,8 +19,13 @@ three-item lists, the same hedged openings. Readers notice. AIScrub finds those
 habits and writes around them without flattening your style into generic "clean copy."
 
 It borrows the best ideas from a few well-known skills (pattern catalogs in the
-spirit of `blader/humanizer`, scoring rubrics in the spirit of `hardikpandya/stop-slop`)
-and merges them into a single workflow.
+spirit of `blader/humanizer`, scoring rubrics in the spirit of `hardikpandya/stop-slop`,
+and tiered vocabulary, profiles, and a regex detector in the spirit of
+`conorbronsdon/avoid-ai-writing`) and merges them into a single workflow.
+
+It is a writing-quality tool, not a verdict: the patterns are signals, and AI
+detectors have high false-positive rates on non-native and deadline-pressed
+writing. Act on the signal; do not use it to ruin someone's day.
 
 ## What it catches
 
@@ -43,6 +51,14 @@ and merges them into a single workflow.
 - Em and en dash overuse (output ships with zero)
 - Excessive bold, title-case headings, decorative emoji
 - Curly quotes and inline-header lists
+
+**Fingerprints (near-proof of paste-from-chat)**
+- Citation-markup leaks (`citeturn0search0`, `oai_citation`)
+- AI-tool URL params (`utm_source=chatgpt.com`)
+- Unfilled placeholders (`[Your Name]`, `2025-XX-XX`)
+
+Inflated vocabulary is flagged in three tiers (always / in clusters / by density)
+to keep ordinary words from getting gutted. The full catalog runs to 59 patterns.
 
 ## The scoring gate
 
@@ -108,24 +124,39 @@ score across the five dimensions.
 
 ```
 aiscrub/
-├── SKILL.md              # orchestrator: the calibrate -> rewrite -> audit -> score loop
+├── SKILL.md              # orchestrator: modes, the calibrate -> rewrite -> audit -> score loop
 ├── references/
-│   ├── patterns.md       # the detection catalog (42 patterns, merged)
-│   ├── scoring.md        # the scoring gate and quick checks
+│   ├── patterns.md       # the detection catalog (59 patterns, tiered vocab)
+│   ├── scoring.md        # the scoring gate, the detector, and severity triage
+│   ├── profiles.md       # context + voice profiles and the tolerance matrix
 │   └── examples.md       # before/after, including one full worked example
+├── detector/
+│   ├── patterns.js       # the deterministic regex + stylometry engine
+│   ├── patterns.test.js  # fixtures (run with `npm test`)
+│   ├── categories.test.js
+│   ├── CATEGORIES.md     # rule <-> detector-category mapping
+│   └── README.md
+├── package.json          # `npm test` runs the detector suites
+├── .github/workflows/    # sync-mirrors + detector CI
 ├── README.md
 └── LICENSE
 ```
 
+Run the detector with `npm test` (zero dependencies, Node >=18); CI runs it on
+every change under `detector/`.
+
 ## Lineage
 
-AIScrub merges two existing skills and keeps faithful mirrors of each in this
+AIScrub merges three existing skills and keeps faithful mirrors of each in this
 repository:
 
 - `blader/humanizer` — the Wikipedia-derived pattern catalog and voice work.
   Mirrored on the **`mirror/humanizer`** branch.
 - `hardikpandya/stop-slop` — the scoring gate and the modular reference
   structure. Mirrored on the **`mirror/stop-slop`** branch.
+- `conorbronsdon/avoid-ai-writing` — the tiered vocabulary, context/voice
+  profiles, severity triage, and the vendored detector engine (`detector/`).
+  Mirrored on the **`mirror/avoid-ai-writing`** branch.
 
 The pattern catalog ultimately draws on
 [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing),
@@ -134,9 +165,9 @@ maintained by WikiProject AI Cleanup.
 The mirrors stay current through
 [`.github/workflows/sync-mirrors.yml`](.github/workflows/sync-mirrors.yml),
 which fetches each upstream daily and force-updates its mirror branch. Trigger
-it by hand any time from the Actions tab. Scheduled runs start once the workflow
-lands on the default branch.
+it by hand any time from the Actions tab.
 
 ## License
 
-MIT. Both upstream skills are MIT licensed.
+MIT. All three upstream skills are MIT licensed; the vendored detector retains
+its upstream copyright (see `detector/README.md`).

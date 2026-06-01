@@ -2,10 +2,12 @@ MIT License
 
 Copyright (c) 2026 AIScrub contributors
 
-AIScrub is an amalgamation of two MIT-licensed skills, whose original copyright
-notices are retained on the mirror/humanizer and mirror/stop-slop branches:
+AIScrub is an amalgamation of three MIT-licensed skills, whose original copyright
+notices are retained on the mirror/humanizer, mirror/stop-slop, and
+mirror/avoid-ai-writing branches:
   - humanizer, Copyright (c) blader
   - stop-slop, Copyright (c) Hardik Pandya
+  - avoid-ai-writing, Copyright (c) Conor Bronsdon (includes the detector/ engine)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

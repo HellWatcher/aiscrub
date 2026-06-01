@@ -1,0 +1,16 @@
+{
+  "name": "aiscrub-detector",
+  "version": "1.0.0",
+  "description": "Deterministic detection engine for the AIScrub skill. Vendored from conorbronsdon/avoid-ai-writing (MIT).",
+  "license": "MIT",
+  "main": "detector/patterns.js",
+  "files": [
+    "detector/patterns.js"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node detector/patterns.test.js && node detector/categories.test.js"
+  }
+}
