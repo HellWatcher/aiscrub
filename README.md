@@ -58,8 +58,14 @@ writing. Act on the signal; do not use it to ruin someone's day.
 - AI-tool URL params (`utm_source=chatgpt.com`)
 - Unfilled placeholders (`[Your Name]`, `2025-XX-XX`)
 
+**Code and repo artifacts** (under the `code` profile)
+- Comments that restate the code, ceremonial docstrings, tutorial comments
+- Inflated commit/PR prose and bullet-soup descriptions
+- Vacuous tests and over-described test names
+- Over-defensive ceremony and TODO theater (flagged, never auto-cut)
+
 Inflated vocabulary is flagged in three tiers (always / in clusters / by density)
-to keep ordinary words from getting gutted. The full catalog runs to 60 patterns.
+to keep ordinary words from getting gutted. The full catalog runs to 68 patterns.
 
 ## The scoring gate
 
@@ -120,7 +126,7 @@ punctuation instead of producing generic clean copy.
 aiscrub/
 ├── SKILL.md              # orchestrator: modes, the calibrate -> rewrite -> audit -> score loop
 ├── references/
-│   ├── patterns.md       # the detection catalog (60 patterns, tiered vocab)
+│   ├── patterns.md       # the detection catalog (68 patterns, tiered vocab)
 │   ├── scoring.md        # the scoring gate, the detector, and severity triage
 │   ├── profiles.md       # context + voice profiles and the tolerance matrix
 │   └── examples.md       # before/after, including one full worked example

@@ -380,3 +380,68 @@ Show what was chosen, not the negative of what wasn't. Cut the comparison when t
 **After:**
 > // Explicit stack, not recursion: inputs nest ~50k deep and blow the call stack.
 > Postgres. (Drop the MySQL comparison; no one needs the runner-up.)
+
+---
+
+## Code and repository artifacts
+
+AI tells specific to source, comments, commits, PRs, and tests. These are
+**judgment-only** (the regex detector does not run on code) and they apply under
+the `code` context profile (see [profiles.md](profiles.md)), which also relaxes
+prose-only rules that do not fit code.
+
+One principle sits under all of them: **comment the *why*, not the *what*.** The
+code already states what it does. A comment earns its place only when it captures
+intent, a constraint, a gotcha, or context the code cannot express. Patterns 65
+and 67 touch executable logic, so for those the skill **flags and explains; it
+never silently cuts.**
+
+### 61. Restating-the-code comments
+Comments that paraphrase the line below them and add nothing.
+
+**Before:**
+> i += 1  // increment i by 1
+> users = []  // initialize an empty list for users
+
+**After:**
+> i += 1
+> users = []
+
+*Carve-out:* keep it when it explains the why, e.g. `i += 1  // skip the header row`.
+
+### 62. Ceremonial docstrings
+Doc blocks that fill every slot with the function's own name and types, so the doc says exactly what the signature already says.
+
+**Before:**
+> /** Gets the user by ID. @param userId The user ID. @returns The user. */
+
+**After:**
+> (delete it) — or, if it earns a docstring — /** Returns null for soft-deleted users; callers must handle that. */
+
+*Carve-out:* public API docs, non-obvious return contracts, units, side effects, ownership.
+
+### 63. Tutorial comments in production code
+Explaining the language or a library to an imagined student: "Arrow functions preserve `this`, so we use one here", "We await the promise to get the resolved value". The codebase is not a textbook. Delete them.
+
+### 64. Banner and divider comments
+`// ===== HELPERS =====`, `// ---- Main logic ----` used to over-organize a short file. If a file needs banners to navigate, split it rather than decorate it. (Code cousin of #56, excessive structure.)
+
+### 65. Placeholder and TODO theater (flag, don't cut)
+Scaffolding shipped as if it were finished work: `// TODO: add validation` on a merged path, `throw new Error("Not implemented")` reachable in production, `const apiKey = "your-api-key-here"`. Code cousin of #45 (unfilled placeholders). Because a TODO can mark real, intentionally-deferred work, **flag it and ask** rather than deleting it; the fix is to do the work or remove the dead stub, and that is the author's call.
+
+### 66. Inflated commit and PR prose
+Tier 1 vocabulary (see #3) leaking into repo metadata, plus vague bullet-soup descriptions. State what changed and why, concretely.
+
+**Before:**
+> Refactor and enhance the authentication module for improved robustness and maintainability
+> ## Changes: Improved performance. Enhanced error handling. Updated various files.
+
+**After:**
+> Lock account after 5 failed logins (was unlimited)
+> Replaces the per-request DB lookup with a 60s cache; cuts auth latency from ~40ms to ~3ms.
+
+### 67. Over-defensive ceremony (flag, don't cut)
+Try/catch that only rethrows or logs-and-swallows, null guards on values that cannot be null, parameters added "just in case", a `let result = ...; return result;` two-step. This **edits executable logic**, and a guard sometimes protects a real edge case the author hit once at 3am. So the skill **reports the smell and proposes the change**; it does not remove a guard on its own. Treat it like #60's carve-out: assume a check may be load-bearing until shown otherwise.
+
+### 68. Vacuous tests and over-described test names
+Tautological assertions (`expect(true).toBe(true)`), tests that only assert a mock was called with what you fed the mock, and names like `it("should successfully return the correct value given valid input under normal conditions")`. Test the behavior, and name the test for that behavior: `it("locks the account after 5 failed logins")`.

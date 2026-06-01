@@ -61,7 +61,9 @@ If the writer gives you a sample of their own writing, read it before rewriting.
 
 ## Profiles
 
-**Voice profiles** set how the prose should sound: `casual`, `professional`, `technical`, `warm`, `blunt`. **Context profiles** set how strict to be for the audience: `linkedin`, `blog`, `technical-blog`, `investor-email`, `docs`, `casual`. They are independent axes (blunt for a blog, warm for docs). Where they govern the same rule and disagree, resolve toward the stricter. If no profile is named, infer from the input and say which you used. Definitions and the per-profile tolerance matrix live in [references/profiles.md](references/profiles.md).
+**Voice profiles** set how the prose should sound: `casual`, `professional`, `technical`, `warm`, `blunt`. **Context profiles** set how strict to be for the audience: `linkedin`, `blog`, `technical-blog`, `investor-email`, `docs`, `casual`, and `code`. They are independent axes (blunt for a blog, warm for docs). Where they govern the same rule and disagree, resolve toward the stricter. If no profile is named, infer from the input and say which you used. Definitions and the per-profile tolerance matrix live in [references/profiles.md](references/profiles.md).
+
+For source, diffs, commits, PRs, and tests, the `code` profile turns on the code-and-repository-artifacts patterns (#61-68 in [references/patterns.md](references/patterns.md)) and relaxes prose-only rules. Patterns that touch executable logic (#65 TODO theater, #67 over-defensive ceremony) are flag-only: report the smell and propose a fix, never silently cut a guard or a deferred-work marker.
 
 ## Personality and soul
 
