@@ -40,6 +40,7 @@ writing. Act on the signal; do not use it to ruin someone's day.
 - Binary contrasts ("It's not X, it's Y")
 - Negative parallelisms and rhetorical setups
 - Dramatic one-line fragments used for fake emphasis
+- Decision-log comments that justify by what wasn't chosen ("did not use X, went with Y")
 
 **Voice and stance**
 - Passive voice and abstractions acting as subjects
@@ -58,7 +59,7 @@ writing. Act on the signal; do not use it to ruin someone's day.
 - Unfilled placeholders (`[Your Name]`, `2025-XX-XX`)
 
 Inflated vocabulary is flagged in three tiers (always / in clusters / by density)
-to keep ordinary words from getting gutted. The full catalog runs to 59 patterns.
+to keep ordinary words from getting gutted. The full catalog runs to 60 patterns.
 
 ## The scoring gate
 
@@ -119,7 +120,7 @@ punctuation instead of producing generic clean copy.
 aiscrub/
 ├── SKILL.md              # orchestrator: modes, the calibrate -> rewrite -> audit -> score loop
 ├── references/
-│   ├── patterns.md       # the detection catalog (59 patterns, tiered vocab)
+│   ├── patterns.md       # the detection catalog (60 patterns, tiered vocab)
 │   ├── scoring.md        # the scoring gate, the detector, and severity triage
 │   ├── profiles.md       # context + voice profiles and the tolerance matrix
 │   └── examples.md       # before/after, including one full worked example

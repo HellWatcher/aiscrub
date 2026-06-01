@@ -365,3 +365,18 @@ Restating the premise in fresh words instead of advancing it: lots of motion, no
 
 ### 59. Vocabulary uniformity (stylometric)
 On general prose over ~200 words, a very low type-token ratio (distinct words / total words, below ~0.40) signals a model locked on a small vocabulary loop. Human prose usually lands 0.50-0.65. The fix is not a thesaurus pass; it is to broaden the *what*: name specific things, cite specific cases, replace a re-used abstract noun with the concrete instance behind it. (Narrow technical topics and second-language writing legitimately compress vocabulary, so treat low TTR as a prompt to look, not a verdict.)
+
+### 60. Rejected-alternative commentary (negative decision logs)
+Comments, docs, or notes that justify a choice by narrating what was *not* chosen: "did not use X, went with Y", "instead of a Map, this uses an array", "rather than recursion, we iterate", "chose not to cache here". The artifact describes the road not taken rather than the thing as it is. AI produces these because it is narrating its own decision process; a reader six months later only needs to know what the code does and why *this* approach holds, not the menu of options that were passed over.
+
+Show what was chosen, not the negative of what wasn't. Cut the comparison when there is no reason attached, or when the reason is common sense ("used a list because order matters" next to an obviously ordered list) or hand-waving ("for flexibility", "for clarity"). This is the decision-log cousin of #42 (diff-anchored writing): #42 narrates a change, this narrates a discarded alternative.
+
+**Carve-out, keep it when the why is load-bearing.** A rejected alternative earns its place only when the reason is genuine, non-obvious, and would otherwise trip up the next person: a real constraint, a measured tradeoff, or a gotcha that invites someone to "fix" the code back to the obvious-but-wrong version. Then name the alternative *and* the concrete reason. Prefer framing it as a warning, not a decision diary.
+
+**Before:**
+> // We don't use a recursive approach here, we use an explicit stack instead.
+> // Chose Postgres over MySQL for the database.
+
+**After:**
+> // Explicit stack, not recursion: inputs nest ~50k deep and blow the call stack.
+> Postgres. (Drop the MySQL comparison; no one needs the runner-up.)
