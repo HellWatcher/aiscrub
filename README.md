@@ -91,8 +91,9 @@ word choice, and punctuation habits before it rewrites.
 
 ## What it will not flag
 
-Polish is not proof of AI. A single em dash, a formal word, or one tidy sentence
-means nothing on its own. AIScrub looks for **clusters** of tells, not isolated ones.
+Polish is not proof of AI. A formal word or one tidy sentence means nothing on its
+own. AIScrub looks for **clusters** of tells, not isolated ones. (Em dashes are the
+exception — they are always flagged for replacement.)
 
 ## Install
 

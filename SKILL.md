@@ -80,7 +80,7 @@ Avoiding AI patterns is only half the work. Sterile, voiceless prose is its own 
 When triaging a long document, fix by tier (full detail in [references/scoring.md](references/scoring.md)):
 
 - **P0, credibility killers:** cutoff disclaimers, chatbot artifacts, citation-markup leaks, vague attributions, fabricated specifics, significance inflation.
-- **P1, obvious AI smell:** Tier 1 vocabulary, template phrases, "let's" openers, synonym cycling, formulaic openings, bold overuse, em-dash frequency.
+- **P1, obvious AI smell:** Tier 1 vocabulary, template phrases, "let's" openers, synonym cycling, formulaic openings, bold overuse, any em dash.
 - **P2, stylistic polish:** generic conclusions, rule of three, uniform paragraph length, copula avoidance, transition stacking.
 
 Use P0+P1 for a quick pass; a full audit covers all three.
@@ -107,7 +107,7 @@ If a draft never clears 35/50 after a couple of passes, hand back the best versi
 
 ## Detection guidance
 
-Polish is not proof of AI. A clean human writer can trip several patterns with no machine involved. Not reliable tells on their own: perfect grammar, mixed registers, dry prose, formal vocabulary, a single em dash, one common transition word, curly quotes (most editors auto-curl), unsourced claims, clean template formatting. Look for **clusters**. A single em dash means nothing; em dashes plus a forced rule of three plus "vibrant tapestry" plus a "Conclusion" section is a confession.
+Polish is not proof of AI. A clean human writer can trip several patterns with no machine involved. Not reliable tells on their own: perfect grammar, mixed registers, dry prose, formal vocabulary, one common transition word, curly quotes (most editors auto-curl), unsourced claims, clean template formatting. Look for **clusters**. A lone transition word means nothing; an em dash plus a forced rule of three plus "vibrant tapestry" plus a "Conclusion" section is a confession. Em dashes are a strong tell on their own and are always flagged for replacement.
 
 Preserve signs of a real person: specific hard-to-fabricate detail, mixed feelings and unresolved tension, dated or subculture-bound references, first-person choices the writer can defend, genuine asides and self-corrections, and real variety in sentence length. When writing *about* AI patterns, quoted examples are exempt; only flag the author's own prose, not cited examples of bad writing.
 
