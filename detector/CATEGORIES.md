@@ -50,7 +50,7 @@ writer-side tests with no detectable form). The
 | `hashtag-stuff` | Hashtag stuffing | Hashtag stuffing |
 | `bullet-np-list` | Bullet-NP list | Bullet lists of bare noun phrases |
 | `title-case-header` | Title Case header | Title case headings |
-| `em-dash` / `formatting` | Em dash overuse / Formatting | Formatting |
+| `em-dash` / `formatting` | Em dash / Formatting | Formatting |
 | `uniformity` | Rhythm uniformity | Rhythm and uniformity |
 | `low-ttr` | Low vocabulary diversity | Vocabulary diversity (stylometric) |
 | `ai-placeholder` | Unfilled placeholder | Unfilled placeholders |

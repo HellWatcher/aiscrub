@@ -1156,15 +1156,15 @@ const AIDetector = (() => {
     const confIssues = matchPatterns(text, CONFIDENCE_CALIBRATION, 'confidence-calibration', 'low');
     if (confIssues.length >= 3) issues.push(...confIssues);
 
-    // ── 22. Em dash frequency ────────────────────────────────────
-    // Match real em dashes, plus `--` only when surrounded by whitespace on at
-    // least one side (skips CLI flags like --save-dev and YAML `---` blocks).
+    // ── 22. Em dash ──────────────────────────────────────────────
+    // Always flag any em dash. Match real em dashes, plus `--` only when
+    // surrounded by whitespace on at least one side (skips CLI flags like
+    // --save-dev and YAML `---` blocks).
     const emDashCount = (text.match(/—|(?<=\s)--(?=\s|$)|(?<=^|\s)--(?=\s)/gm) || []).length;
-    const emDashRate = emDashCount / (wordCount / 1000);
-    if (emDashRate > 1) {
+    if (emDashCount > 0) {
       issues.push({
         type: 'em-dash',
-        text: `${emDashCount} em dashes in ${wordCount} words`,
+        text: `${emDashCount} em dash${emDashCount === 1 ? '' : 'es'} in ${wordCount} words`,
         severity: 'medium',
         suggestion: 'Replace with commas, periods, or rewrite',
       });
@@ -1584,7 +1584,7 @@ const AIDetector = (() => {
     'false-concession': 'False concession',
     'rhetorical-question': 'Rhetorical question',
     'confidence-calibration': 'Confidence stacking',
-    'em-dash': 'Em dash overuse',
+    'em-dash': 'Em dash',
     'uniformity': 'Rhythm uniformity',
     'formatting': 'Formatting',
     'tier3-phrase': 'Boilerplate phrase',
