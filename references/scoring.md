@@ -88,7 +88,7 @@ on routine events.
 
 **P1, obvious AI smell (fix before publishing):** Tier 1 vocabulary, template and
 slot-fill phrases, "let's" openers, synonym cycling, formulaic openings, bold
-overuse, em-dash frequency, parataxis, hashtag stuffing.
+overuse, any em dash, parataxis, hashtag stuffing.
 
 **P2, stylistic polish (fix when time allows):** generic conclusions, rule of
 three, uniform paragraph length, copula avoidance, transition stacking,

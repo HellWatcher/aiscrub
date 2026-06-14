@@ -257,7 +257,7 @@ const AIDetector = (() => {
     'false-concession': 2,
     'rhetorical-question': 2,
     'confidence-calibration': 2,
-    'em-dash': 4,
+    'em-dash': 6,
     uniformity: 5,
     formatting: 3,
     'tier3-phrase': 3,

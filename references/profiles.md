@@ -47,7 +47,7 @@ Rules not listed apply at full strength everywhere.
 
 | Rule | linkedin | blog | technical-blog | investor-email | docs | casual |
 |---|---|---|---|---|---|---|
-| Em dashes | relaxed (2/post) | strict | strict | strict | relaxed | skip |
+| Em dashes | strict | strict | strict | strict | strict | strict |
 | Bold overuse | relaxed (hooks OK) | strict | strict | strict | relaxed | skip |
 | Emoji in headers | relaxed (1-2 end-of-line) | strict | strict | strict | skip | skip |
 | Excessive bullets | skip | strict | relaxed | strict | skip | skip |
