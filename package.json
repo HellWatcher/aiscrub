@@ -19,6 +19,7 @@
     "detect": "node detector/cli.js",
     "eval": "node eval/run.js",
     "eval:echo": "node eval/echo.js",
+    "research:metaphor": "node eval/metaphor-probe.js",
     "check-counts": "node scripts/check-counts.js",
     "guards": "node scripts/check-counts.js"
   }
