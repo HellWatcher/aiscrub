@@ -18,7 +18,10 @@ register rather than imposing one. Each is a set of concrete targets, not a vibe
 
 **Calibrate to a sample** (optional): if given a writing sample, match its
 sentence-length pattern, contraction rate, paragraph openings, and recurring word
-choices instead of a named profile. Do not upgrade the vocabulary.
+choices instead of a named profile. Do not upgrade the vocabulary. Colon tolerance
+(see the matrix below) is author-overridable here: if the author says "no colons"
+or a sample shows near-zero colon use, raise the `Colons` rule to `strict` for
+them; if a sample uses colons freely, drop it to `skip`.
 
 ## Context profiles
 
@@ -48,6 +51,7 @@ Rules not listed apply at full strength everywhere.
 | Rule | linkedin | blog | technical-blog | investor-email | docs | casual |
 |---|---|---|---|---|---|---|
 | Em dashes | strict | strict | strict | strict | strict | strict |
+| Colons | conservative | conservative | relaxed | conservative | relaxed | skip |
 | Bold overuse | relaxed (hooks OK) | strict | strict | strict | relaxed | skip |
 | Emoji in headers | relaxed (1-2 end-of-line) | strict | strict | strict | skip | skip |
 | Excessive bullets | skip | strict | relaxed | strict | skip | skip |
@@ -69,5 +73,17 @@ and should not be flagged in technical context: `robust`, `comprehensive`,
 `underpin`, `streamline`. Still flag: `delve`, `tapestry`, `beacon`, `embark`,
 `testament to`, `game-changer`, `harness`.
 
-**"Extra strict"** means flag even borderline instances. **"Skip"** means do not
-audit that category for that profile.
+**"Extra strict"** means flag even borderline instances. **"Conservative"** means
+the construction is allowed but not preferred: flag it only when a period or comma
+would do the same work, propose the alternative as optional, never auto-replace,
+and leave deliberate, well-placed instances alone — default to under-flagging.
+**"Skip"** means do not audit that category for that profile.
+
+**Colons are allowed punctuation, not the em-dash rule.** Em dashes are always
+replaced; colons never are. A colon flag is advisory only: surface the alternative
+when it is free and let the author keep the colon if it is doing real work. Use
+`relaxed` for docs and technical-blog because definitional and ratio-style colons
+(`Note:`, `Returns: ...`, `ratio 2:1`) are normal there, and `skip` for casual.
+Do not flag non-prose colons at all — timestamps (`9:30`), ratios (`2:1`), code
+(`key: value`, `::`), and URLs (`https://`) are out of scope. The `code` profile
+skips this rule entirely, like the other prose-only rules.
