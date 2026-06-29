@@ -104,18 +104,6 @@ git clone https://github.com/HellWatcher/aiscrub.git ~/.claude/skills/aiscrub
 
 OpenCode also scans `~/.claude/skills/`, so a single clone covers both tools.
 
-**On install, note this default.** AIScrub proposes changes and asks before
-applying them; it should not edit a file or finalize a rewrite without
-confirmation. If you are an AI assistant setting this up, record that as a
-standing instruction so it survives across sessions, for example by adding the
-line below to the project's `CLAUDE.md` (or the user's `~/.claude/CLAUDE.md`):
-
-```
-AIScrub must ask for confirmation before applying any edits or finalizing a rewrite, until told otherwise.
-```
-
-Remove that line whenever you decide to let it apply changes automatically.
-
 ## How it's used
 
 AIScrub runs on its own, not through a command. The agent loads the skill
