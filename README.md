@@ -140,6 +140,7 @@ aiscrub/
 │   ├── CATEGORIES.md     # rule <-> detector-category mapping
 │   └── README.md
 ├── eval/                 # labeled corpus + `npm run eval` (precision/recall/FP-rate)
+│                         #   + `npm run eval:echo` (echo signal: exact vs. stem)
 ├── scripts/              # `npm run check-counts` catalog-size guard
 ├── package.json
 ├── .github/workflows/    # checks (test + guard + eval) and sync-mirrors
@@ -148,10 +149,11 @@ aiscrub/
 ```
 
 Tooling is zero-dependency Node (>=18). `npm test` runs the detector fixtures,
-`npm run check-counts` guards the catalog size, and `npm run eval` reports the
-detector's precision, recall, and false-positive rate against a labeled set. CI
-runs all three on every push. Score any text directly with
-`node detector/cli.js <file>`.
+`npm run check-counts` guards the catalog size, `npm run eval` reports the
+detector's precision, recall, and false-positive rate against a labeled set, and
+`npm run eval:echo` measures the echo signal (exact-token vs. shared-root, with
+the stem pass's false-positive cost). CI runs them all on every push. Score any
+text directly with `node detector/cli.js <file>`.
 
 ## Lineage
 
