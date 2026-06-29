@@ -280,6 +280,12 @@ const AIDetector = (() => {
     'fnword-trigram-entropy': 5,
     'cross-para-burstiness': 5,
     'normalization-flag': 9,
+    // Echo (close word/root repetition) is a flag-only writing-quality
+    // signal, NOT an AI-origin tell — humans echo under deadline as readily
+    // as models do. Weight 0 keeps it out of the score so it can't inflate
+    // a human draft or trip the false-positive budget; it still appears in
+    // issues[] with both source offsets for the editor.
+    echo: 0,
     // Vocabulary-diversity signal (type-token ratio). Weighted modestly
     // because the threshold (>=200 tokens AND TTR<0.4) is conservative;
     // it stacks with structural signals to push borderline scores up.
@@ -586,6 +592,45 @@ const AIDetector = (() => {
     /\bwithout\s+a\s+doubt\b/gi,
   ];
 
+  // ─── Echo (close word/root repetition) ─────────────────────────────
+  // Closed-class words repeat constantly and must never count as an echo.
+  // Reused from the function-word list but trimmed to what's relevant for
+  // content-word echo detection (issue #4). Anaphora like "where my value
+  // is and where it stays" is handled for free: "where" is a stopword.
+  const ECHO_STOPWORDS = new Set([
+    'the', 'a', 'an', 'and', 'or', 'nor', 'but', 'so', 'yet', 'for', 'of',
+    'to', 'in', 'on', 'at', 'by', 'with', 'from', 'as', 'is', 'are', 'was',
+    'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did',
+    'will', 'would', 'should', 'could', 'may', 'might', 'must', 'can', 'this',
+    'that', 'these', 'those', 'it', 'its', 'they', 'them', 'their', 'there',
+    'here', 'we', 'our', 'us', 'i', 'you', 'your', 'my', 'me', 'he', 'she',
+    'his', 'her', 'him', 'not', 'no', 'if', 'then', 'than', 'when', 'where',
+    'which', 'who', 'whom', 'what', 'how', 'why', 'because', 'about', 'into',
+    'over', 'under', 'out', 'up', 'down', 'off', 'too', 'very', 'just', 'more',
+    'most', 'some', 'any', 'all', 'each', 'every', 'own', 'only', 'also',
+    'even', 'still', 'rather', 'much', 'many', 'one', 'such', 'both', 'either',
+    "it's", "i'm", "i'd", "don't", "can't", "won't", "that's", "there's",
+  ]);
+
+  // Lightweight, dependency-free stemmer for the optional shared-root echo
+  // pass. Strips a conservative set of inflectional suffixes and normalizes
+  // the silent 'e' so take/taking, handle/handled, cultivate/cultivating
+  // collapse to one root. Deliberately shallow: it does NOT bridge
+  // derivational gaps (resolution↔resolved stay distinct), which is the
+  // documented recall cost of staying false-positive-cheap. See eval/echo.js
+  // for the measured precision/recall/FP comparison vs. exact-token mode.
+  function lightStem(word) {
+    let w = word.toLowerCase();
+    if (w.length < 4) return w;
+    if (/ies$/.test(w) && w.length > 4) w = w.slice(0, -3) + 'y';
+    else if (/(sses|shes|ches|xes)$/.test(w)) w = w.slice(0, -2);
+    else if (/s$/.test(w) && !/(ss|us|is)$/.test(w)) w = w.slice(0, -1);
+    if (/(ing|ed)$/.test(w) && w.length > 4) w = w.replace(/(ing|ed)$/, '');
+    if (/ly$/.test(w) && w.length > 4) w = w.slice(0, -2);
+    if (/e$/.test(w) && w.length > 3) w = w.slice(0, -1);
+    return w;
+  }
+
   // ═══ Helpers ═══════════════════════════════════════════════════════
 
   function tokenize(text) {
@@ -617,6 +662,113 @@ const AIDetector = (() => {
           severity,
           suggestion: null,
         });
+      }
+    }
+    return issues;
+  }
+
+  // ─── Echo detection (word/root repetition in a close window) ────────
+  // A deterministic writing-quality signal: the same content word — or,
+  // with the optional stem pass, the same root — repeating inside a short
+  // window (within a sentence or across adjacent sentences). Usually a
+  // rewrite artifact, not a deliberate choice.
+  //
+  // Flag-only (P2 / severity 'medium'). Unlike the AI-vocabulary rules it
+  // does NOT contribute to the AI-origin score (ISSUE_WEIGHTS.echo = 0):
+  // echo is a human smell too, so counting it would inflate the score on
+  // perfectly human prose and break the false-positive budget. It surfaces
+  // in issues[] with both source offsets in `locations` for the editor to
+  // act on; it never auto-rewrites (which instance to change is a judgment).
+  //
+  // Guards against the obvious false positives:
+  //   - stopwords (closed-class words) never count;
+  //   - words shorter than 4 chars never count;
+  //   - a topic term repeated across the whole document is exempt
+  //     (domain-frequency floor), so "Tier 2 … Tier 2 … Tier 2" technical
+  //     repetition doesn't fire;
+  //   - intentional parallelism ("the people … and the people") is skipped
+  //     when both occurrences share the preceding word and a coordinator
+  //     sits between them.
+  //
+  // Window/threshold (default 20 words) chosen from the labeled sample in
+  // eval/echo-fixtures.json — see eval/echo.js for the precision/recall
+  // sweep and the exact-vs-stem FP comparison.
+  function detectEcho(text, options = {}) {
+    const useStem = !!options.echoStem;
+    const window = options.echoWindow || 20;
+
+    // Sentence spans (coarse .!? split) so we can bound echoes to the same
+    // or an adjacent sentence.
+    const sentSpans = [];
+    const sentenceRe = /[^.!?]+[.!?]+|\S[^.!?]*$/g;
+    let sm;
+    while ((sm = sentenceRe.exec(text)) !== null) {
+      sentSpans.push({ start: sm.index, end: sm.index + sm[0].length });
+    }
+
+    // Token stream with char offsets and owning sentence index.
+    const tokens = [];
+    const wordRe = /[A-Za-z][A-Za-z'’-]*/g;
+    let wm;
+    let si = 0;
+    while ((wm = wordRe.exec(text)) !== null) {
+      const idx = wm.index;
+      while (si < sentSpans.length - 1 && idx >= sentSpans[si].end) si++;
+      const lower = wm[0].toLowerCase().replace(/’/g, "'");
+      tokens.push({ raw: wm[0], lower, idx, sent: sentSpans.length ? si : 0 });
+    }
+
+    const isContent = (t) => t.lower.length >= 4 && !ECHO_STOPWORDS.has(t.lower);
+    const keyOf = (t) => (useStem ? lightStem(t.lower) : t.lower);
+
+    // Document frequency + sentence spread per content key → domain-term
+    // exemption. A word that recurs across the whole piece is a topic term;
+    // local repetition of it is expected, not an echo.
+    const docFreq = new Map();
+    const keySents = new Map();
+    let contentCount = 0;
+    for (const t of tokens) {
+      if (!isContent(t)) continue;
+      contentCount++;
+      const k = keyOf(t);
+      docFreq.set(k, (docFreq.get(k) || 0) + 1);
+      if (!keySents.has(k)) keySents.set(k, new Set());
+      keySents.get(k).add(t.sent);
+    }
+    const domainFloor = Math.max(5, Math.ceil(contentCount * 0.02));
+
+    const issues = [];
+    const claimed = new Set();
+    for (let i = 0; i < tokens.length; i++) {
+      const a = tokens[i];
+      if (!isContent(a)) continue;
+      const k = keyOf(a);
+      if ((docFreq.get(k) || 0) >= domainFloor) continue;
+      if ((keySents.get(k)?.size || 0) >= 4) continue;
+      for (let j = i + 1; j < tokens.length && j - i <= window; j++) {
+        const b = tokens[j];
+        if (!isContent(b)) continue;
+        if (keyOf(b) !== k) continue;
+        if (b.sent - a.sent > 1) break; // past the adjacent-sentence window
+        const claimKey = `${k}:${a.sent}`;
+        if (claimed.has(claimKey)) break;
+        // Intentional-parallelism guard: same word before both occurrences
+        // with a coordinator (and/or/nor/but or comma) between them.
+        const prevA = tokens[i - 1]?.lower;
+        const prevB = tokens[j - 1]?.lower;
+        const between = text.slice(a.idx, b.idx);
+        if (prevA && prevA === prevB && /(\b(?:and|or|nor|but)\b|,)/.test(between)) break;
+        claimed.add(claimKey);
+        const sameRoot = useStem && a.lower !== b.lower;
+        issues.push({
+          type: 'echo',
+          text: `"${a.lower}"${sameRoot ? `/"${b.lower}"` : ''} repeats within ${j - i} words`,
+          index: a.idx,
+          locations: [a.idx, b.idx],
+          severity: 'medium',
+          suggestion: `Possible echo: "${a.raw}" … "${b.raw}" — vary one if the repeat isn't deliberate.`,
+        });
+        break;
       }
     }
     return issues;
@@ -1245,6 +1397,11 @@ const AIDetector = (() => {
       });
     }
 
+    // ── Echo (close word/root repetition) ───────────────────────
+    // Flag-only, P2. Weight 0 (see ISSUE_WEIGHTS.echo) so it never moves
+    // the AI-origin score — it's a writing-quality signal, not an AI tell.
+    issues.push(...detectEcho(text, options));
+
     // ── Score from the deduped issue list ───────────────────────
     // Previously rawScore was accumulated inline per pattern hit, so
     // repeated hits of the same phrase (or overlapping matches) inflated
@@ -1371,6 +1528,11 @@ const AIDetector = (() => {
       'tier3-phrase-cluster',
       'hashtag-stuff',
       'bullet-np-list',
+      // Echo carries its own char offsets in `locations`; its summary text
+      // ("X repeats within N words") is not a substring of the document, so
+      // skip the substring-based region mapping to avoid inflating
+      // unmappedHighlights.
+      'echo',
     ]);
     const hits = sentences.map(() => ({ count: 0, weight: 0 }));
     const lowerText = text.toLowerCase();
@@ -1603,6 +1765,7 @@ const AIDetector = (() => {
     'cross-para-burstiness': 'Cross-paragraph rhythm',
     'normalization-flag': 'Bypass-trick chars',
     'low-ttr': 'Low vocabulary diversity',
+    'echo': 'Word echo',
     'ai-placeholder': 'Unfilled placeholder',
     'ai-citation-markup': 'Chatbot citation markup leak',
     'ai-utm-source': 'AI-tool URL parameter',
@@ -1611,6 +1774,7 @@ const AIDetector = (() => {
   return {
     analyzeText,
     normalizeText,
+    detectEcho,
     getLabel,
     getColor,
     SEVERITY_LABELS,

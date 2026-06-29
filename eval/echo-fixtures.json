@@ -1,0 +1,100 @@
+[
+  {
+    "id": "echo-exact-resolution",
+    "label": "echo",
+    "kind": "exact",
+    "text": "I used methodical testing to reach a resolution. I'd rather work the problem to a resolution than hand it off.",
+    "note": "'resolution' repeats across adjacent sentences (exact token)."
+  },
+  {
+    "id": "echo-exact-problem",
+    "label": "echo",
+    "kind": "exact",
+    "text": "I would rather work the problem all the way to a fix than hand the problem off to someone else.",
+    "note": "'problem' twice within one sentence (exact token)."
+  },
+  {
+    "id": "echo-exact-case-customer",
+    "label": "echo",
+    "kind": "exact",
+    "text": "Every case is a customer to me, which is why I judge each case by its customer impact first.",
+    "note": "'case' and 'customer' each repeat within one sentence (exact token)."
+  },
+  {
+    "id": "echo-exact-take",
+    "label": "echo",
+    "kind": "exact",
+    "text": "The more capable I get, the more I can take on the harder work I currently cannot take.",
+    "note": "'take' repeats within one sentence (exact token)."
+  },
+  {
+    "id": "echo-stem-handle",
+    "label": "echo",
+    "kind": "stem",
+    "text": "She was handling the rollout calmly while I handled the customer comms in the next room.",
+    "note": "handling/handled share a root; caught only by the stem pass."
+  },
+  {
+    "id": "echo-stem-cultivate",
+    "label": "echo",
+    "kind": "stem",
+    "text": "Good managers cultivate trust slowly, cultivating small wins before they ever ask for a big one.",
+    "note": "cultivate/cultivating share a root; caught only by the stem pass."
+  },
+  {
+    "id": "clean-bug-report",
+    "label": "clean",
+    "kind": "exact",
+    "text": "The build broke this morning. I rolled back the auth refactor and the suite is green again. Still chasing why a token refresh returns 401 for Safari sessions but never Firefox.",
+    "note": "Varied human prose; no close content-word repeat."
+  },
+  {
+    "id": "clean-anaphora-where",
+    "label": "clean",
+    "kind": "exact",
+    "text": "I know exactly where my value is and where it stays, and I do not chase titles to feel it.",
+    "note": "Deliberate anaphora on the stopword 'where' — must not flag."
+  },
+  {
+    "id": "clean-parallel-people",
+    "label": "clean",
+    "kind": "exact",
+    "text": "It is a government of the people, by the people, and for the people, built to last.",
+    "note": "Intentional rhetorical parallelism on 'people' — coordinator guard must skip it."
+  },
+  {
+    "id": "clean-domain-term",
+    "label": "clean",
+    "kind": "exact",
+    "text": "The router speaks BGP to its peers. BGP sessions reset on link flap, so we damp the BGP routes. Every BGP neighbor reconverges within a minute, and BGP keeps the table stable after that.",
+    "note": "'BGP' is a topic term recurring across the whole piece — domain-frequency floor must exempt it."
+  },
+  {
+    "id": "clean-far-apart",
+    "label": "clean",
+    "kind": "exact",
+    "text": "Resolution is the goal of every ticket we open. We triage by severity, gather logs, reproduce locally, write a regression test, ship the patch, and only then do we mark another resolution as final.",
+    "note": "'resolution' recurs but far apart and not in adjacent sentences — outside the window."
+  },
+  {
+    "id": "clean-varied-essay",
+    "label": "clean",
+    "kind": "exact",
+    "text": "Mentorship changed how I work. A senior engineer once watched me flail at a deadlock for an hour, then asked one question that reframed the whole thing. I have tried to pass that habit forward ever since.",
+    "note": "Natural prose with varied vocabulary; no echo."
+  },
+  {
+    "id": "stemfp-build-building",
+    "label": "clean",
+    "kind": "exact",
+    "text": "The nightly build passed every check this morning, and afterward the whole team walked over to tour the new building.",
+    "note": "Stem-collision FP: build (artifact) and building (structure) share the stem 'build' but not a meaning. Exact mode is correct; the stem pass over-flags."
+  },
+  {
+    "id": "stemfp-fast-fasting",
+    "label": "clean",
+    "kind": "exact",
+    "text": "The integration tests run fast now, which really helps on the mornings when I am fasting before the standup.",
+    "note": "Stem-collision FP: fast (quick) and fasting (not eating) share the stem 'fast'. Exact mode is correct; the stem pass over-flags."
+  }
+]

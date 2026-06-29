@@ -19,3 +19,5 @@ jobs:
       - run: npm run check-counts
       # Detector eval: fail if it starts false-accusing humans.
       - run: npm run eval -- --max-fp=0.15
+      # Echo-detector eval: precision/recall + exact-vs-stem FP report.
+      - run: npm run eval:echo

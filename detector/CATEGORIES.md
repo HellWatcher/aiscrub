@@ -76,6 +76,15 @@ not as a phrase a human editor would look up:
 | `fnword-trigram-entropy` | Grammar repetition | Function-word trigram entropy |
 | `cross-para-burstiness` | Cross-paragraph rhythm | Sentence-length variance across paragraphs |
 | `normalization-flag` | Bypass-trick chars | Zero-width / homoglyph humanizer-bypass detection |
+| `echo` | Word echo | Close content-word/root repetition (lemma match in a sliding window) |
+
+> **Flag-only, score-neutral:** `echo` is a writing-quality smell, not an
+> AI-origin tell — humans echo as readily as models do. It carries weight `0`
+> (`ISSUE_WEIGHTS.echo`) so it never moves the score or the FP budget; it
+> surfaces in `issues[]` with both source offsets in `locations` and is never
+> auto-rewritten. Exact-token by default; an optional stem pass
+> (`options.echoStem`) catches shared roots at a measured false-positive cost.
+> See `../eval/echo.js`.
 
 ## C. Skill-only (LLM judgment — no detector `type`)
 
