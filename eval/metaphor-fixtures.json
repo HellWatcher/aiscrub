@@ -1,0 +1,114 @@
+[
+  {
+    "id": "hf-thread-plot",
+    "source": "human",
+    "figurative": true,
+    "novel": true,
+    "text": "I can step away from a hard bug and pick the thread back up afterward without losing the plot.",
+    "note": "Issue #3 real example — scored 0-6/100 HUMAN_ONLY. Mixed/fresh image."
+  },
+  {
+    "id": "hf-lens",
+    "source": "human",
+    "figurative": true,
+    "novel": true,
+    "text": "When I triage, customer impact is the lens I work through, not raw ticket age.",
+    "note": "Issue #3 real example. Fresh copular metaphor."
+  },
+  {
+    "id": "hf-dig-path",
+    "source": "human",
+    "figurative": true,
+    "novel": true,
+    "text": "I would rather dig in and find the path myself than pass the problem forward.",
+    "note": "Issue #3 real example. Physical verb on abstract work."
+  },
+  {
+    "id": "hl-plain-1",
+    "source": "human",
+    "figurative": false,
+    "novel": false,
+    "text": "The build broke this morning, so I rolled back the auth refactor and the suite is green again.",
+    "note": "Plain human prose, no figuration."
+  },
+  {
+    "id": "hl-plain-2",
+    "source": "human",
+    "figurative": false,
+    "novel": false,
+    "text": "We meet on Tuesdays to review open tickets and decide what ships in the next release.",
+    "note": "Plain human prose."
+  },
+  {
+    "id": "hl-literal-image-words",
+    "source": "human",
+    "figurative": false,
+    "novel": false,
+    "text": "The camera lens was scratched, so I wiped it, checked the file path, and saved the photo to disk.",
+    "note": "FP trap: 'lens' and 'path' used literally, not metaphorically."
+  },
+  {
+    "id": "hl-literal-build",
+    "source": "human",
+    "figurative": false,
+    "novel": false,
+    "text": "They build the house in spring and plant the garden once the frost clears in April.",
+    "note": "FP trap: physical verbs on physical objects (literal)."
+  },
+  {
+    "id": "nn-plain-1",
+    "source": "human-nonnative",
+    "figurative": false,
+    "novel": false,
+    "text": "I am working on this problem since two days and I will fix the issue before the deadline comes.",
+    "note": "Non-native plain prose; must not be flagged as figurative."
+  },
+  {
+    "id": "nn-plain-2",
+    "source": "human-nonnative",
+    "figurative": false,
+    "novel": false,
+    "text": "The team make good progress and we deliver the feature in time for the customer demonstration.",
+    "note": "Non-native plain prose; FP-risk sample for any prose-judgment rule."
+  },
+  {
+    "id": "af-stock-1",
+    "source": "ai",
+    "figurative": true,
+    "novel": false,
+    "text": "In today's ever-evolving landscape, we navigate the intricate tapestry of innovation and unlock the true potential of the ecosystem.",
+    "note": "AI stock-metaphor cluster — already caught by the existing tiered lists."
+  },
+  {
+    "id": "af-stock-2",
+    "source": "ai",
+    "figurative": true,
+    "novel": false,
+    "text": "This pivotal journey serves as a beacon, illuminating the path forward and weaving together the threads of a transformative vision.",
+    "note": "AI stock-metaphor cluster (landscape/beacon/path/threads)."
+  },
+  {
+    "id": "af-stock-3",
+    "source": "ai",
+    "figurative": true,
+    "novel": false,
+    "text": "Innovation is the engine that fuels growth, and collaboration is the bridge that unlocks a symphony of opportunity.",
+    "note": "AI copular-metaphor stack with stock images (engine/bridge/symphony)."
+  },
+  {
+    "id": "al-plain",
+    "source": "ai",
+    "figurative": false,
+    "novel": false,
+    "text": "The function takes two arguments, validates the input, and returns a sorted list of results to the caller.",
+    "note": "AI-style literal technical prose, no figuration."
+  },
+  {
+    "id": "hl-work-problem-literal",
+    "source": "human",
+    "figurative": false,
+    "novel": false,
+    "text": "On exam day, work the problem you already know first, then circle back to the rest with whatever time is left.",
+    "note": "FP trap that DOES trip Approach B rule 2 (work>the>problem). Idiomatic/literal, not fresh imagery — the precision cost of syntactic-frame matching."
+  }
+]

@@ -103,6 +103,8 @@ Polish is not proof of AI. A clean human writer can trip several patterns with n
 
 Preserve signs of a real person: specific hard-to-fabricate detail, mixed feelings and unresolved tension, dated or subculture-bound references, first-person choices the writer can defend, genuine asides and self-corrections, and real variety in sentence length. When writing *about* AI patterns, quoted examples are exempt; only flag the author's own prose, not cited examples of bad writing.
 
+**Metaphor (judgment, flag-only).** The detector only catches *catalogued* stock metaphors. Watch by eye for metaphor that is stock, over-dense, or mixed (doubled images in one clause, e.g. "the lens I work through" stacked with "find the path"). Measurement found AI prose is heavy on stock imagery — already covered by the vocabulary tiers — while a real writer's *fresh, situation-specific* metaphor is a sign of voice, not a tell. So leave original imagery alone, treat density only as a P2 nudge, and never auto-rewrite a metaphor; the literal-vs-figurative call needs a human read. See [docs/research/metaphor-density.md](docs/research/metaphor-density.md).
+
 ## Reference
 
 The catalog draws on [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) (WikiProject AI Cleanup) and on three skills, each preserved on a mirror branch in this repo: `blader/humanizer` (`mirror/humanizer`), `hardikpandya/stop-slop` (`mirror/stop-slop`), and `conorbronsdon/avoid-ai-writing` (`mirror/avoid-ai-writing`), the source of the tiered vocabulary, profiles, severity tiers, and the detector engine.
