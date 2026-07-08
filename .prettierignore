@@ -1,0 +1,7 @@
+# Data fixtures and prose are not code-formatted.
+eval/*-fixtures.json
+eval/fixtures.json
+references/
+docs/
+node_modules/
+package-lock.json
