@@ -18,7 +18,10 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
     const oxfordHit = text.match(/\b\w+,\s+\w+,\s+and\s+\w+/g);
     const hasOxford = (oxfordHit?.length || 0) >= 1;
     const doubleSpaces = (text.match(/[^.!?]  +/g) || []).length;
-    const missingApos = /\b(?:dont|wont|cant|isnt|wasnt|shouldnt|wouldnt|couldnt|youre|theyre|its\s+a\s+\w+ing)\b/i.test(text);
+    const missingApos =
+      /\b(?:dont|wont|cant|isnt|wasnt|shouldnt|wouldnt|couldnt|youre|theyre|its\s+a\s+\w+ing)\b/i.test(
+        text,
+      );
     const clean = doubleSpaces === 0 && !missingApos;
     const signals = [hasCurly, hasEmDash, hasOxford, clean].filter(Boolean).length;
     if (signals >= 4 && wordCount >= 80) {
@@ -26,7 +29,8 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
         type: 'smart-punct-signature',
         text: 'curly-quotes + em-dash + Oxford comma + zero typos',
         severity: 'high',
-        suggestion: 'Smart-punctuation signature consistent with LLM output. Humans typing into textareas rarely produce all four.',
+        suggestion:
+          'Smart-punctuation signature consistent with LLM output. Humans typing into textareas rarely produce all four.',
       });
     }
   }
@@ -38,12 +42,14 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
   // signature: low variance of per-paragraph punctuation density.
   // Requires ≥4 paragraphs to be meaningful.
   if (paragraphs.length >= 4) {
-    const densities = paragraphs.map((p) => {
-      const words = (p.match(/\S+/g) || []).length;
-      if (words < 5) return null;
-      const puncts = (p.match(/[,;:—()]/g) || []).length;
-      return puncts / words;
-    }).filter((d) => d !== null);
+    const densities = paragraphs
+      .map((p) => {
+        const words = (p.match(/\S+/g) || []).length;
+        if (words < 5) return null;
+        const puncts = (p.match(/[,;:—()]/g) || []).length;
+        return puncts / words;
+      })
+      .filter((d) => d !== null);
     if (densities.length >= 4) {
       const mean = densities.reduce((a, b) => a + b, 0) / densities.length;
       const variance = densities.reduce((s, d) => s + (d - mean) ** 2, 0) / densities.length;
@@ -56,7 +62,8 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
           type: 'punct-distribution',
           text: `Punctuation density uniform across paragraphs (CV=${cv.toFixed(2)})`,
           severity: 'medium',
-          suggestion: 'AI text holds punctuation density steady; human writers swing between dense and sparse paragraphs.',
+          suggestion:
+            'AI text holds punctuation density steady; human writers swing between dense and sparse paragraphs.',
         });
       }
     }
@@ -72,15 +79,14 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
   // trigrams over the sequence, compute Shannon entropy. Bins below
   // threshold flag.
   if (wordCount >= 150) {
-    const FUNC_WORDS = new Set([
-      'the','a','an','and','or','but','of','to','in','on','at','by','for','with',
-      'from','as','is','was','are','were','be','been','being','have','has','had',
-      'do','does','did','will','would','should','could','may','might','must','can',
-      'this','that','these','those','it','its','they','them','their','there','here',
-      'we','our','us','i','you','your','he','she','his','her','him','not','no','so',
-      'if','then','than','when','where','which','who','what','how','why','because',
-    ]);
-    const seq = tokens.map((t) => FUNC_WORDS.has(t) ? t : '_').filter((_, i, arr) => arr[i] !== '_' || (i > 0 && arr[i - 1] !== '_'));
+    const FUNC_WORDS = new Set(
+      'the a an and or but of to in on at by for with from as is was are were be been being have has had do does did will would should could may might must can this that these those it its they them their there here we our us i you your he she his her him not no so if then than when where which who what how why because'.split(
+        ' ',
+      ),
+    );
+    const seq = tokens
+      .map((t) => (FUNC_WORDS.has(t) ? t : '_'))
+      .filter((_, i, arr) => arr[i] !== '_' || (i > 0 && arr[i - 1] !== '_'));
     if (seq.length >= 50) {
       const trigrams = {};
       for (let i = 0; i < seq.length - 2; i++) {
@@ -103,7 +109,8 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
           type: 'fnword-trigram-entropy',
           text: `Function-word trigram entropy ${normalized.toFixed(2)} (low)`,
           severity: 'medium',
-          suggestion: 'Grammatical structure is unusually repetitive. AI sampling collapses onto narrower templates than human writing.',
+          suggestion:
+            'Grammatical structure is unusually repetitive. AI sampling collapses onto narrower templates than human writing.',
         });
       }
       // Degenerate case: single distinct trigram repeated across the
@@ -115,7 +122,8 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
           type: 'fnword-trigram-entropy',
           text: 'Single function-word trigram repeated across document',
           severity: 'high',
-          suggestion: 'Grammatical structure is fully degenerate — every clause uses the same function-word skeleton.',
+          suggestion:
+            'Grammatical structure is fully degenerate — every clause uses the same function-word skeleton.',
         });
       }
     }
@@ -127,15 +135,17 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
   // same sentence-length variance. Humans vary: terse paras next to
   // discursive paras. Measure variance of CV across paragraphs.
   if (paragraphs.length >= 4) {
-    const cvs = paragraphs.map((p) => {
-      const sents = getSentences(p);
-      if (sents.length < 3) return null;
-      const lens = sents.map(countWords);
-      const m = lens.reduce((a, b) => a + b, 0) / lens.length;
-      if (m === 0) return null;
-      const v = lens.reduce((s, l) => s + (l - m) ** 2, 0) / lens.length;
-      return Math.sqrt(v) / m;
-    }).filter((c) => c !== null);
+    const cvs = paragraphs
+      .map((p) => {
+        const sents = getSentences(p);
+        if (sents.length < 3) return null;
+        const lens = sents.map(countWords);
+        const m = lens.reduce((a, b) => a + b, 0) / lens.length;
+        if (m === 0) return null;
+        const v = lens.reduce((s, l) => s + (l - m) ** 2, 0) / lens.length;
+        return Math.sqrt(v) / m;
+      })
+      .filter((c) => c !== null);
     if (cvs.length >= 4) {
       const cvMean = cvs.reduce((a, b) => a + b, 0) / cvs.length;
       const cvVar = cvs.reduce((s, c) => s + (c - cvMean) ** 2, 0) / cvs.length;
@@ -148,7 +158,8 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
           type: 'cross-para-burstiness',
           text: `Sentence-rhythm uniform across paragraphs (σCV=${cvStd.toFixed(2)})`,
           severity: 'medium',
-          suggestion: 'Every paragraph has the same internal rhythm. Humans vary cadence between terse and discursive paragraphs.',
+          suggestion:
+            'Every paragraph has the same internal rhythm. Humans vary cadence between terse and discursive paragraphs.',
         });
       }
     }
@@ -156,7 +167,7 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
 
   // ── 23. Sentence length uniformity ───────────────────────────
   if (sentences.length >= 5) {
-    const lengths = sentences.map(s => countWords(s));
+    const lengths = sentences.map((s) => countWords(s));
     const avg = lengths.reduce((a, b) => a + b, 0) / lengths.length;
     const variance = lengths.reduce((sum, l) => sum + Math.pow(l - avg, 2), 0) / lengths.length;
     const stdDev = Math.sqrt(variance);
@@ -194,16 +205,17 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
         type: 'low-ttr',
         text: `Vocabulary diversity ${(ttr * 100).toFixed(1)}% (${unique} unique / ${tokens.length} tokens)`,
         severity: 'low',
-        suggestion: 'Text reuses a narrow word set. Vary nouns and verbs deliberately, or check if the topic genuinely warrants the repetition.',
+        suggestion:
+          'Text reuses a narrow word set. Vary nouns and verbs deliberately, or check if the topic genuinely warrants the repetition.',
       });
     }
   }
 
   // ── 24. Paragraph length uniformity ──────────────────────────
   if (paragraphs.length >= 4) {
-    const paraLengths = paragraphs.map(p => getSentences(p).length);
+    const paraLengths = paragraphs.map((p) => getSentences(p).length);
     const avg = paraLengths.reduce((a, b) => a + b, 0) / paraLengths.length;
-    const allSimilar = paraLengths.every(l => Math.abs(l - avg) <= 1);
+    const allSimilar = paraLengths.every((l) => Math.abs(l - avg) <= 1);
     if (allSimilar && avg >= 3) {
       issues.push({
         type: 'uniformity',

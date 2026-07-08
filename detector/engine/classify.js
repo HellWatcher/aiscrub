@@ -10,11 +10,12 @@
 // confident human verdict — a 50k-word LLM-generated document is
 // not "human", it's just outside our scoring window.
 function buildV2Defaults(classification, confidence) {
-  const probs = classification === 'HUMAN_ONLY'
-    ? { human: 1, mixed: 0, ai: 0 }
-    : classification === 'AI_ONLY'
-      ? { human: 0, mixed: 0, ai: 1 }
-      : { human: 0.333, mixed: 0.334, ai: 0.333 };
+  const probs =
+    classification === 'HUMAN_ONLY'
+      ? { human: 1, mixed: 0, ai: 0 }
+      : classification === 'AI_ONLY'
+        ? { human: 0, mixed: 0, ai: 1 }
+        : { human: 0.333, mixed: 0.334, ai: 0.333 };
   return {
     document_classification: classification,
     class_probabilities: probs,
@@ -26,7 +27,7 @@ function buildV2Defaults(classification, confidence) {
 // FN-biased: false positives damage trust more than false negatives,
 // so MIXED is wide and AI_ONLY requires multiple signals.
 // See docs/engine-history.md#trinary-calibration for the GPTZero basis.
-function classifyTrinary({ score, issues, regions, normFlags, wordCount, denseAIVocab }) {
+function classifyTrinary({ score, issues, normFlags, wordCount, denseAIVocab }) {
   // Strong corroborators — each is near-dispositive on its own:
   //   - cutoff-disclaimer (LLM self-identifies as an AI)
   //   - reasoning-artifact + chatbot-artifact co-occurrence
@@ -49,8 +50,11 @@ function classifyTrinary({ score, issues, regions, normFlags, wordCount, denseAI
   // Weak (stylometric) corroborators — suggestive on their own,
   // dispositive in combination. Smart-punct-signature matches
   // Word-edited human prose so doesn't count without other support.
-  const stylometricHits = ['punct-distribution', 'cross-para-burstiness', 'fnword-trigram-entropy']
-    .filter((t) => issues.some((i) => i.type === t)).length;
+  const stylometricHits = [
+    'punct-distribution',
+    'cross-para-burstiness',
+    'fnword-trigram-entropy',
+  ].filter((t) => issues.some((i) => i.type === t)).length;
   const hasSmartPunct = issues.some((i) => i.type === 'smart-punct-signature');
   const weakCorrob = (stylometricHits >= 2 ? 1 : 0) + (hasSmartPunct ? 1 : 0);
 
@@ -79,8 +83,14 @@ function classifyTrinary({ score, issues, regions, normFlags, wordCount, denseAI
   // hide in toFixed.
   const aiSoft = Math.min(0.97, score / 100 + totalCorrob * 0.06 + strongCorrob * 0.08);
   let p;
-  if (classification === 'HUMAN_ONLY') p = { human: Math.max(0.6, 1 - aiSoft), mixed: Math.min(0.35, aiSoft * 0.8), ai: Math.min(0.1, aiSoft * 0.3) };
-  else if (classification === 'AI_ONLY') p = { human: Math.max(0.02, 1 - aiSoft - 0.05), mixed: 0.1, ai: aiSoft };
+  if (classification === 'HUMAN_ONLY')
+    p = {
+      human: Math.max(0.6, 1 - aiSoft),
+      mixed: Math.min(0.35, aiSoft * 0.8),
+      ai: Math.min(0.1, aiSoft * 0.3),
+    };
+  else if (classification === 'AI_ONLY')
+    p = { human: Math.max(0.02, 1 - aiSoft - 0.05), mixed: 0.1, ai: aiSoft };
   else p = { human: Math.max(0.15, 0.6 - aiSoft * 0.5), mixed: 0.5, ai: aiSoft * 0.7 };
   const rawSum = p.human + p.mixed + p.ai;
   p.human = +(p.human / rawSum).toFixed(3);
@@ -98,7 +108,8 @@ function classifyTrinary({ score, issues, regions, normFlags, wordCount, denseAI
   //   low    — everything else
   let confidence;
   if (strongCorrob >= 2 || hasCutoff || (score < 8 && wordCount >= 100)) confidence = 'high';
-  else if (strongCorrob >= 1 || (score >= 45 && weakCorrob >= 1) || score < 20) confidence = 'medium';
+  else if (strongCorrob >= 1 || (score >= 45 && weakCorrob >= 1) || score < 20)
+    confidence = 'medium';
   else confidence = 'low';
 
   return { classification, probabilities, confidence };

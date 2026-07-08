@@ -20,43 +20,43 @@ writer-side tests with no detectable form). The
 
 ## A. Direct mapping (skill rule → detector `type`)
 
-| Detector `type` | Label | SKILL.md section |
-|---|---|---|
-| `tier1` / `tier2` / `tier3` | AI vocabulary / Word cluster / Overused word | Words and phrases to replace |
-| `transition` | AI transition | Transition phrases to remove or rewrite |
-| `template-phrase` | Template phrase | Template phrases (avoid) |
-| `tier3-phrase` / `tier3-phrase-cluster` | Boilerplate phrase / cluster | Template phrases (avoid) |
-| `chatbot` | Chatbot artifact | Chatbot artifacts |
-| `sycophantic` | Sycophantic tone | Sycophantic tone |
-| `acknowledgment-loop` | Acknowledgment loop | Acknowledgment loops |
-| `filler` | Filler phrase | Filler phrases |
-| `hollow-intensifier` | Hollow intensifier | Filler phrases (intensifiers) |
-| `generic-conclusion` | Generic conclusion | Generic conclusions |
-| `future-narrative` | Generic future narrative | Generic future-narrative closers |
-| `lets-construction` | "Let's" opener | "Let's" constructions |
-| `reasoning-artifact` | Reasoning artifact | Reasoning chain artifacts |
-| `significance-inflation` | Significance inflation | Significance inflation |
-| `novelty-inflation` | Novelty inflation | Novelty inflation |
-| `real-actual-inflation` | "Real/actual" inflation | "Real/actual" adjective inflation |
-| `vague-attribution` | Vague attribution | Vague attributions |
-| `emotional-flatline` | Emotional flatline | Emotional flatline / Superficial -ing analyses |
-| `cutoff-disclaimer` | Cutoff disclaimer | Cutoff disclaimers |
-| `false-concession` | False concession | False concession structure |
-| `rhetorical-question` | Rhetorical question | Rhetorical question openers |
-| `formulaic-opener` | Formulaic opener | Formulaic challenges |
-| `confidence-calibration` | Confidence stacking | Confidence calibration phrases |
-| `hedge-stack` | Hedge-stacked prediction | Hedge-stacked predictions |
-| `parenthetical-hedge` | Parenthetical hedge | Parenthetical hedging |
-| `hashtag-stuff` | Hashtag stuffing | Hashtag stuffing |
-| `bullet-np-list` | Bullet-NP list | Bullet lists of bare noun phrases |
-| `title-case-header` | Title Case header | Title case headings |
-| `em-dash` / `formatting` | Em dash / Formatting | Formatting |
-| `uniformity` | Rhythm uniformity | Rhythm and uniformity |
-| `low-ttr` | Low vocabulary diversity | Vocabulary diversity (stylometric) |
-| `ai-placeholder` | Unfilled placeholder | Unfilled placeholders |
-| `ai-citation-markup` | Chatbot citation markup leak | Chatbot citation markup leaks |
-| `ai-utm-source` | AI-tool URL parameter | AI-tool URL parameters |
-| `smart-punct-signature` | Smart-punct signature | Formatting (curly quotation marks) — *partial* |
+| Detector `type`                         | Label                                        | SKILL.md section                               |
+| --------------------------------------- | -------------------------------------------- | ---------------------------------------------- |
+| `tier1` / `tier2` / `tier3`             | AI vocabulary / Word cluster / Overused word | Words and phrases to replace                   |
+| `transition`                            | AI transition                                | Transition phrases to remove or rewrite        |
+| `template-phrase`                       | Template phrase                              | Template phrases (avoid)                       |
+| `tier3-phrase` / `tier3-phrase-cluster` | Boilerplate phrase / cluster                 | Template phrases (avoid)                       |
+| `chatbot`                               | Chatbot artifact                             | Chatbot artifacts                              |
+| `sycophantic`                           | Sycophantic tone                             | Sycophantic tone                               |
+| `acknowledgment-loop`                   | Acknowledgment loop                          | Acknowledgment loops                           |
+| `filler`                                | Filler phrase                                | Filler phrases                                 |
+| `hollow-intensifier`                    | Hollow intensifier                           | Filler phrases (intensifiers)                  |
+| `generic-conclusion`                    | Generic conclusion                           | Generic conclusions                            |
+| `future-narrative`                      | Generic future narrative                     | Generic future-narrative closers               |
+| `lets-construction`                     | "Let's" opener                               | "Let's" constructions                          |
+| `reasoning-artifact`                    | Reasoning artifact                           | Reasoning chain artifacts                      |
+| `significance-inflation`                | Significance inflation                       | Significance inflation                         |
+| `novelty-inflation`                     | Novelty inflation                            | Novelty inflation                              |
+| `real-actual-inflation`                 | "Real/actual" inflation                      | "Real/actual" adjective inflation              |
+| `vague-attribution`                     | Vague attribution                            | Vague attributions                             |
+| `emotional-flatline`                    | Emotional flatline                           | Emotional flatline / Superficial -ing analyses |
+| `cutoff-disclaimer`                     | Cutoff disclaimer                            | Cutoff disclaimers                             |
+| `false-concession`                      | False concession                             | False concession structure                     |
+| `rhetorical-question`                   | Rhetorical question                          | Rhetorical question openers                    |
+| `formulaic-opener`                      | Formulaic opener                             | Formulaic challenges                           |
+| `confidence-calibration`                | Confidence stacking                          | Confidence calibration phrases                 |
+| `hedge-stack`                           | Hedge-stacked prediction                     | Hedge-stacked predictions                      |
+| `parenthetical-hedge`                   | Parenthetical hedge                          | Parenthetical hedging                          |
+| `hashtag-stuff`                         | Hashtag stuffing                             | Hashtag stuffing                               |
+| `bullet-np-list`                        | Bullet-NP list                               | Bullet lists of bare noun phrases              |
+| `title-case-header`                     | Title Case header                            | Title case headings                            |
+| `em-dash` / `formatting`                | Em dash / Formatting                         | Formatting                                     |
+| `uniformity`                            | Rhythm uniformity                            | Rhythm and uniformity                          |
+| `low-ttr`                               | Low vocabulary diversity                     | Vocabulary diversity (stylometric)             |
+| `ai-placeholder`                        | Unfilled placeholder                         | Unfilled placeholders                          |
+| `ai-citation-markup`                    | Chatbot citation markup leak                 | Chatbot citation markup leaks                  |
+| `ai-utm-source`                         | AI-tool URL parameter                        | AI-tool URL parameters                         |
+| `smart-punct-signature`                 | Smart-punct signature                        | Formatting (curly quotation marks) — _partial_ |
 
 > **Partial map:** `smart-punct-signature` fires only when curly quotes co-occur
 > with an em-dash, an Oxford comma, and clean typing (≥80 words) — never on curly
@@ -70,13 +70,13 @@ writer-side tests with no detectable form). The
 These extend the skill with signals that work as math over the whole document,
 not as a phrase a human editor would look up:
 
-| Detector `type` | Label | Why it's engine-only |
-|---|---|---|
-| `punct-distribution` | Punctuation distribution | Per-paragraph punctuation uniformity |
-| `fnword-trigram-entropy` | Grammar repetition | Function-word trigram entropy |
-| `cross-para-burstiness` | Cross-paragraph rhythm | Sentence-length variance across paragraphs |
-| `normalization-flag` | Bypass-trick chars | Zero-width / homoglyph humanizer-bypass detection |
-| `echo` | Word echo | Close content-word/root repetition (lemma match in a sliding window) |
+| Detector `type`          | Label                    | Why it's engine-only                                                 |
+| ------------------------ | ------------------------ | -------------------------------------------------------------------- |
+| `punct-distribution`     | Punctuation distribution | Per-paragraph punctuation uniformity                                 |
+| `fnword-trigram-entropy` | Grammar repetition       | Function-word trigram entropy                                        |
+| `cross-para-burstiness`  | Cross-paragraph rhythm   | Sentence-length variance across paragraphs                           |
+| `normalization-flag`     | Bypass-trick chars       | Zero-width / homoglyph humanizer-bypass detection                    |
+| `echo`                   | Word echo                | Close content-word/root repetition (lemma match in a sliding window) |
 
 > **Flag-only, score-neutral:** `echo` is a writing-quality smell, not an
 > AI-origin tell — humans echo as readily as models do. It carries weight `0`

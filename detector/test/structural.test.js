@@ -5,7 +5,8 @@ const { test } = require('./_harness');
 console.log('Structural fixtures');
 
 test('em-dash detector ignores CLI flags like --save-dev', () => {
-  const text = 'Run npm install --save-dev and then npm run build --no-verify --silent. Takes about ten seconds on this machine. The package is installed into node_modules directly after the install command completes successfully.';
+  const text =
+    'Run npm install --save-dev and then npm run build --no-verify --silent. Takes about ten seconds on this machine. The package is installed into node_modules directly after the install command completes successfully.';
   const r = AIDetector.analyzeText(text);
   const emDashIssues = r.issues.filter((i) => i.type === 'em-dash');
   assert.equal(emDashIssues.length, 0, 'CLI flags should not count as em dashes');
@@ -47,7 +48,8 @@ The intersection of AI, DePIN, mining infrastructure, and decentralized compute 
 });
 
 test('hashtag-stuff does not fire on prose with 2-3 hashtags', () => {
-  const text = 'Shipped the new build last night. Catching bugs faster with the new instrumentation. Notes are in the doc, and the next push lands tomorrow. #buildinpublic #devlog';
+  const text =
+    'Shipped the new build last night. Catching bugs faster with the new instrumentation. Notes are in the doc, and the next push lands tomorrow. #buildinpublic #devlog';
   const r = AIDetector.analyzeText(text);
   const types = new Set(r.issues.map((i) => i.type));
   assert.ok(!types.has('hashtag-stuff'), 'should not flag 2 hashtags as hashtag-stuff');
@@ -75,7 +77,8 @@ That's the full list for this push.`;
 test('bullet-np-list ignores bullets inside fenced code blocks', () => {
   // CLI flag docs / option dumps inside ``` fences are not prose AI
   // scaffolding. False-positive that would fire on most READMEs.
-  const text = "Run with one of these modes via `--mode`:\n\n```\n- unit\n- smoke\n- integration\n- e2e\n- perf\n- stress\n```\n\nDefaults to `unit` if omitted.";
+  const text =
+    'Run with one of these modes via `--mode`:\n\n```\n- unit\n- smoke\n- integration\n- e2e\n- perf\n- stress\n```\n\nDefaults to `unit` if omitted.';
   const r = AIDetector.analyzeText(text);
   const types = new Set(r.issues.map((i) => i.type));
   assert.ok(!types.has('bullet-np-list'), 'bullets inside code fences should not flag');
@@ -96,7 +99,8 @@ test('hashtag-stuff matches tags after sentence punctuation', () => {
   // LinkedIn/X trailing blocks. The prior regex char class `[\s\\]`
   // had a literal backslash and silently missed any tag not preceded
   // by whitespace.
-  const text = "Built a thing this week.\n#startup #crypto #web3 #ai #devlog #shipping #foundermode";
+  const text =
+    'Built a thing this week.\n#startup #crypto #web3 #ai #devlog #shipping #foundermode';
   const r = AIDetector.analyzeText(text);
   const types = new Set(r.issues.map((i) => i.type));
   assert.ok(types.has('hashtag-stuff'), 'expected hashtag-stuff on 7-tag trailing block');
@@ -106,7 +110,8 @@ test('hashtag-stuff excludes URL fragments from the count', () => {
   // URL anchors like example.com/page#section must not count toward
   // the hashtag threshold or every doc post with a fragment link
   // would false-positive.
-  const text = 'See the spec at example.com/api#auth and the deploy guide at example.com/ops#rollback and the troubleshooting notes at example.com/help#errors and the changelog at example.com/log#latest. Also kb.example.com/faq#section1 and forum.example.com/t/123#post-4 round out the references.';
+  const text =
+    'See the spec at example.com/api#auth and the deploy guide at example.com/ops#rollback and the troubleshooting notes at example.com/help#errors and the changelog at example.com/log#latest. Also kb.example.com/faq#section1 and forum.example.com/t/123#post-4 round out the references.';
   const r = AIDetector.analyzeText(text);
   const types = new Set(r.issues.map((i) => i.type));
   assert.ok(!types.has('hashtag-stuff'), 'URL fragments should not count as hashtags');

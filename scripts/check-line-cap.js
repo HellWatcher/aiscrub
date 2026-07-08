@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict";
+'use strict';
 
 // Anti-drift guard for the file-size standard (see STANDARDS.md): runtime and
 // test JS must stay under a soft line cap so files stay legible and modular.
@@ -11,25 +11,25 @@
 //   node scripts/check-line-cap.js            enforce the default cap
 //   node scripts/check-line-cap.js --cap=400  override the cap
 
-const fs = require("fs");
-const path = require("path");
+const fs = require('fs');
+const path = require('path');
 
 const CAP = (() => {
-  const arg = process.argv.find((a) => a.startsWith("--cap="));
-  return arg ? Number(arg.split("=")[1]) : 300;
+  const arg = process.argv.find((a) => a.startsWith('--cap='));
+  return arg ? Number(arg.split('=')[1]) : 300;
 })();
 
-const root = path.resolve(__dirname, "..");
+const root = path.resolve(__dirname, '..');
 // Runtime + test JS. Prose and JSON fixtures are out of scope.
-const SCAN_DIRS = ["detector", "eval", "scripts"];
-const EXEMPT_MARKER = "@cap-exempt: DATA";
+const SCAN_DIRS = ['detector', 'eval', 'scripts'];
+const EXEMPT_MARKER = '@cap-exempt: DATA';
 
 function walk(dir, acc) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (entry.name === "node_modules") continue;
+    if (entry.name === 'node_modules') continue;
     const full = path.join(dir, entry.name);
     if (entry.isDirectory()) walk(full, acc);
-    else if (entry.isFile() && entry.name.endsWith(".js")) acc.push(full);
+    else if (entry.isFile() && entry.name.endsWith('.js')) acc.push(full);
   }
   return acc;
 }
@@ -49,7 +49,7 @@ const files = SCAN_DIRS.flatMap((d) => {
 let exemptCount = 0;
 const violations = [];
 for (const file of files) {
-  const text = fs.readFileSync(file, "utf8");
+  const text = fs.readFileSync(file, 'utf8');
   if (isExempt(file, text)) {
     exemptCount++;
     continue;
@@ -64,11 +64,11 @@ if (violations.length) {
     .sort((a, b) => b.lines - a.lines)
     .forEach((v) => console.error(`  - ${v.file}: ${v.lines} lines`));
   console.error(
-    `\nSplit the file, or mark a genuine data table exempt (move it under data/ or add "// ${EXEMPT_MARKER}").`
+    `\nSplit the file, or mark a genuine data table exempt (move it under data/ or add "// ${EXEMPT_MARKER}").`,
   );
   process.exit(1);
 }
 
 console.log(
-  `check-line-cap: OK (${files.length} files scanned, ${exemptCount} data-exempt, cap ${CAP})`
+  `check-line-cap: OK (${files.length} files scanned, ${exemptCount} data-exempt, cap ${CAP})`,
 );

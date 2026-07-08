@@ -31,6 +31,13 @@ module.exports = [
       // The normalize / lookalike detectors use control-range char classes
       // deliberately to strip zero-width and homoglyph bypass characters.
       'no-control-regex': 'off',
+      // The bypass-char stripper matches literal zero-width characters inside
+      // a regex literal (and tests embed them in fixtures). Allow them there;
+      // still catch a stray invisible char pasted into ordinary code.
+      'no-irregular-whitespace': [
+        'error',
+        { skipStrings: true, skipTemplates: true, skipRegExps: true, skipComments: true },
+      ],
     },
   },
   // The line-cap guard owns file length; ESLint must not also police it, so

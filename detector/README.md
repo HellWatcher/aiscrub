@@ -24,8 +24,8 @@ node detector/patterns.test.js
 ```
 
 ```js
-const AIDetector = require("./detector/patterns.js");
-const result = AIDetector.analyzeText("Your text here…");
+const AIDetector = require('./detector/patterns.js');
+const result = AIDetector.analyzeText('Your text here…');
 console.log(result.score, result.label, result.issues.length);
 ```
 
@@ -35,16 +35,16 @@ CommonJS).
 
 ## `analyzeText(text, options?)` → result
 
-| Field | Type | Meaning |
-|---|---|---|
-| `score` | `0–100` | 0 = clean, 100 = heavy AI |
-| `label` | string | `Minimal` / `Some` / `Strong` / `Heavy` (or `Empty` / `Too short` / `Text too long`) |
-| `issues[]` | `{type, text, severity, …}` | one entry per detected pattern; `type` keys map to [`CATEGORIES.md`](./CATEGORIES.md) |
-| `stats` | object | `wordCount`, per-tier counts, `contextMode`, `denseAIVocab`, normalization flags, etc. |
-| `document_classification` | string | trinary `HUMAN_ONLY` / `MIXED` / `AI_ONLY` (shape mirrors GPTZero for swap-in) |
-| `class_probabilities` | `{human, mixed, ai}` | sums to exactly 1.0 |
-| `confidence_category` | `low` / `medium` / `high` | |
-| `highlight_sentence_for_ai` | region[] | sentence spans with byte offsets + per-region score, for UI highlighting |
+| Field                       | Type                        | Meaning                                                                                |
+| --------------------------- | --------------------------- | -------------------------------------------------------------------------------------- |
+| `score`                     | `0–100`                     | 0 = clean, 100 = heavy AI                                                              |
+| `label`                     | string                      | `Minimal` / `Some` / `Strong` / `Heavy` (or `Empty` / `Too short` / `Text too long`)   |
+| `issues[]`                  | `{type, text, severity, …}` | one entry per detected pattern; `type` keys map to [`CATEGORIES.md`](./CATEGORIES.md)  |
+| `stats`                     | object                      | `wordCount`, per-tier counts, `contextMode`, `denseAIVocab`, normalization flags, etc. |
+| `document_classification`   | string                      | trinary `HUMAN_ONLY` / `MIXED` / `AI_ONLY` (shape mirrors GPTZero for swap-in)         |
+| `class_probabilities`       | `{human, mixed, ai}`        | sums to exactly 1.0                                                                    |
+| `confidence_category`       | `low` / `medium` / `high`   |                                                                                        |
+| `highlight_sentence_for_ai` | region[]                    | sentence spans with byte offsets + per-region score, for UI highlighting               |
 
 `options.contextMode` accepts `general` (default) or `technical`; technical mode
 suppresses flags that are legitimate in code-adjacent prose (e.g. Title Case

@@ -22,7 +22,7 @@ ESLint and Prettier are dev-only. CI installs them with `npm ci` (a
 Soft cap of **300 lines** per runtime/test JS file, so files stay legible and
 one-concern. **DATA files are exempt** — long pattern/lexicon tables would only
 be made worse by splitting. A file is treated as data if it lives under a `data/`
-directory *or* carries `// @cap-exempt: DATA` in its first few lines. Enforced by
+directory _or_ carries `// @cap-exempt: DATA` in its first few lines. Enforced by
 `scripts/check-line-cap.js`.
 
 ## Module boundaries

@@ -75,7 +75,14 @@ function buildSentenceRegions(text, issues) {
   for (let i = 0; i < sentences.length; i++) {
     if (hits[i].count > 0) {
       if (cur === null) {
-        cur = { startSentence: i, endSentence: i, start: sentences[i].start, end: sentences[i].end, hitCount: hits[i].count, weight: hits[i].weight };
+        cur = {
+          startSentence: i,
+          endSentence: i,
+          start: sentences[i].start,
+          end: sentences[i].end,
+          hitCount: hits[i].count,
+          weight: hits[i].weight,
+        };
       } else {
         cur.endSentence = i;
         cur.end = sentences[i].end;

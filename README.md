@@ -30,12 +30,14 @@ writing. Act on the signal; do not use it to ruin someone's day.
 ## What it catches
 
 **Phrasing**
+
 - Throat-clearing openers ("In today's world", "It's worth noting that")
 - Inflated vocabulary (vibrant, testament, pivotal, crucial, delve)
 - Business jargon and empty intensifiers
 - Most adverbs
 
 **Structure**
+
 - The rule of three forced onto every list
 - Binary contrasts ("It's not X, it's Y")
 - Negative parallelisms and rhetorical setups
@@ -43,22 +45,26 @@ writing. Act on the signal; do not use it to ruin someone's day.
 - Decision-log comments that justify by what wasn't chosen ("did not use X, went with Y")
 
 **Voice and stance**
+
 - Passive voice and abstractions acting as subjects
 - Distant-narrator framing instead of direct address
 - Sycophanty, over-hedging, and knowledge-cutoff disclaimers
 - Chatbot artifacts left in the draft
 
 **Style**
+
 - Em and en dash overuse (output ships with zero)
 - Excessive bold, title-case headings, decorative emoji
 - Curly quotes and inline-header lists
 
 **Fingerprints (near-proof of paste-from-chat)**
+
 - Citation-markup leaks (`citeturn0search0`, `oai_citation`)
 - AI-tool URL params (`utm_source=chatgpt.com`)
 - Unfilled placeholders (`[Your Name]`, `2025-XX-XX`)
 
 **Code and repo artifacts** (under the `code` profile)
+
 - Comments that restate the code, ceremonial docstrings, tutorial comments
 - Inflated commit/PR prose and bullet-soup descriptions
 - Vacuous tests and over-described test names
@@ -71,13 +77,13 @@ to keep ordinary words from getting gutted. The full catalog runs to 68 patterns
 
 After the rewrite, AIScrub scores the draft from 1 to 10 on five dimensions:
 
-| Dimension | Question |
-|---|---|
-| Directness | Does each sentence state its point plainly? |
-| Rhythm | Do sentence lengths actually vary? |
-| Trust | Does it respect the reader instead of hand-holding? |
-| Authenticity | Could a specific human have written this? |
-| Density | Can anything be cut without loss? |
+| Dimension    | Question                                            |
+| ------------ | --------------------------------------------------- |
+| Directness   | Does each sentence state its point plainly?         |
+| Rhythm       | Do sentence lengths actually vary?                  |
+| Trust        | Does it respect the reader instead of hand-holding? |
+| Authenticity | Could a specific human have written this?           |
+| Density      | Can anything be cut without loss?                   |
 
 A draft below **35/50** goes back for another revision. The score keeps the tool
 honest, so it does not just shuffle phrases and call it done.
