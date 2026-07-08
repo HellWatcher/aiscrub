@@ -5,9 +5,10 @@
 > branch; pull updates from there. AIScrub uses this engine as the deterministic
 > half of its detect/score loop.
 
-`patterns.js` is the executable expression of this skill's pattern rules — a
-zero-dependency, build-step-free detection engine that scores text for
-AI-writing tells. It runs identically in Node (`>=18`) and in the browser.
+`patterns.js` is a thin barrel over the modular engine in [`engine/`](./engine) —
+together they are the executable expression of this skill's pattern rules: a
+zero-dependency, build-step-free detection engine (Node `>=18`) that scores text
+for AI-writing tells.
 
 The skill's `SKILL.md` is the human-readable catalog of rules; this engine is
 the deterministic, testable implementation of the regex-detectable subset, plus
@@ -18,9 +19,9 @@ the two in sync.
 ## Run it
 
 ```bash
-npm test          # runs detector/patterns.test.js (no deps to install)
+npm test          # runs the detector/test/ fixtures (no deps to install)
 # or directly:
-node detector/patterns.test.js
+node detector/test/run.js
 ```
 
 ```js
@@ -29,9 +30,10 @@ const result = AIDetector.analyzeText('Your text here…');
 console.log(result.score, result.label, result.issues.length);
 ```
 
-In the browser, load `patterns.js` as a plain script — it self-registers as a
-global `AIDetector` (the `module.exports` block is guarded and only runs under
-CommonJS).
+The engine is CommonJS modules under [`engine/`](./engine): `data/` (the pattern
+and vocabulary tables), pure helpers (`normalize`, `echo`, `text-utils`), `passes/`
+(the detection passes), and `analyze.js` (the orchestrator), assembled by
+`index.js`. For the browser, bundle `patterns.js` with any CommonJS-aware bundler.
 
 ## `analyzeText(text, options?)` → result
 

@@ -139,27 +139,32 @@ aiscrub/
 │   ├── catalog-map.md    # which patterns the detector backs vs. judgment-only
 │   └── examples.md       # before/after, including one full worked example
 ├── detector/
-│   ├── patterns.js       # the deterministic regex + stylometry engine
+│   ├── patterns.js       # thin barrel over engine/ (the public API)
+│   ├── engine/           # the modular detector: data/, passes/, orchestrator
 │   ├── cli.js            # `node detector/cli.js <file>` to score text
-│   ├── patterns.test.js  # fixtures (run with `npm test`)
+│   ├── test/             # per-concern fixtures (run with `npm test`)
 │   ├── categories.test.js
 │   ├── CATEGORIES.md     # rule <-> detector-category mapping
 │   └── README.md
 ├── eval/                 # labeled corpus + `npm run eval` (precision/recall/FP-rate)
 │                         #   + `npm run eval:echo` (echo signal: exact vs. stem)
-├── scripts/              # `npm run check-counts` catalog-size guard
+├── scripts/              # check-counts (catalog size) + check-line-cap (file cap)
+├── docs/                 # engine-history.md (provenance) + research/
+├── STANDARDS.md          # code conventions (zero-dep, file cap, module boundaries)
 ├── package.json
-├── .github/workflows/    # checks (test + guard + eval) and sync-mirrors
+├── .github/workflows/    # checks (format/lint/test/guards/eval) and sync-mirrors
 ├── README.md
 └── LICENSE
 ```
 
-Tooling is zero-dependency Node (>=18). `npm test` runs the detector fixtures,
-`npm run check-counts` guards the catalog size, `npm run eval` reports the
-detector's precision, recall, and false-positive rate against a labeled set, and
-`npm run eval:echo` measures the echo signal (exact-token vs. shared-root, with
-the stem pass's false-positive cost). CI runs them all on every push. Score any
-text directly with `node detector/cli.js <file>`.
+The detector runtime is zero-dependency Node (>=18); ESLint and Prettier are
+dev-only. `npm test` runs the fixtures, `npm run check-counts` guards the catalog
+size, `npm run check-line-cap` enforces the 300-line file cap, `npm run eval`
+reports the detector's precision, recall, and false-positive rate against a
+labeled set, and `npm run eval:echo` measures the echo signal (exact-token vs.
+shared-root, with the stem pass's false-positive cost). CI runs `npm ci` then all
+of them, plus `format` and `lint`, on every push. Score any text directly with
+`node detector/cli.js <file>`.
 
 ## Lineage
 
