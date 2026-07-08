@@ -15,7 +15,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "test": "node detector/patterns.test.js && node detector/categories.test.js",
+    "test": "node detector/test/run.js && node detector/categories.test.js",
     "detect": "node detector/cli.js",
     "eval": "node eval/run.js",
     "eval:echo": "node eval/echo.js",
