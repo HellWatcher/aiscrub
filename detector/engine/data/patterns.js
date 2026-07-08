@@ -109,8 +109,7 @@ const HOLLOW_INTENSIFIERS = [
 // ─── Emotional flatline ────────────────────────────────────────────
 // The "interesting (part|thing|aspect|piece)" family is matched in two
 // shapes: (1) "the most interesting X" inline (the canonical AI list
-// intro), and (2) bare "Interesting X:" used as a section-header opener,
-// which is the section-break variant that slipped past v3.3.x.
+// intro), and (2) bare "Interesting X:" used as a section-header opener.
 const EMOTIONAL_FLATLINE = [
   /\bwhat\s+surprised\s+me\s+most\b/gi,
   /\bi\s+was\s+fascinated\s+to\b/gi,
@@ -118,9 +117,8 @@ const EMOTIONAL_FLATLINE = [
   /\bi\s+was\s+excited\s+to\s+learn\b/gi,
   /\bthe\s+most\s+interesting\s+(?:part|thing|aspect|piece)\b/gi,
   // Multiline flag (/m) so `^` matches at every line start, including
-  // position 0 of a pasted text that has no leading newline. The earlier
-  // `(?:^|\n)` form silently missed bare openers at the very start of
-  // input — caught by silent-failure audit 2026-05-16.
+  // position 0 of a pasted text that has no leading newline (a bare
+  // `(?:^|\n)` form misses openers at the very start of input).
   /^\s*interesting\s+(?:part|thing|aspect|piece)(?:\s+of\s+(?:the\s+)?\w+)?\s*:/gim,
 ];
 
@@ -149,11 +147,10 @@ const CUTOFF_DISCLAIMERS = [
 ];
 
 // ─── AI-tool fingerprints ──────────────────────────────────────────
-// Three near-definitive AI-origin signals adapted from
-// Aboudjem/humanizer-skill P33-P35 (see docs/competitive/audits/
-// 2026-05-17-aboudjem-humanizer-skill.md). Unlike the statistical
-// patterns above, single hit on any of these is strong evidence —
+// Three near-definitive AI-origin signals: unlike the statistical
+// patterns above, a single hit on any of these is strong evidence —
 // the AI tool literally left its fingerprint in the text.
+// Provenance: see docs/engine-history.md#ai-tool-fingerprints.
 
 // Unfilled slot-fill placeholders. Catches the canonical "[Your Name]"
 // family plus dated stubs and HTML/MD comments with placeholder verbs.

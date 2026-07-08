@@ -50,7 +50,7 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
       const cv = mean > 0 ? Math.sqrt(variance) / mean : 0;
       // CV < 0.25 across paragraphs means each paragraph has the same
       // punctuation density — the AI signature. Humans usually swing
-      // wider. Threshold derived from stylometry papers (arxiv 2507.00838).
+      // wider. (Threshold basis: docs/engine-history.md#stylometry-thresholds.)
       if (cv < 0.25 && mean >= 0.04) {
         issues.push({
           type: 'punct-distribution',
@@ -177,19 +177,15 @@ function runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }) {
   // words typically sits around 0.50–0.65 for English; AI prose
   // tends flatter (0.55–0.75 looks normal, but the lower end of the
   // *too-flat* tail at >=200 words is where the signal lives — too
-  // FEW unique words for the length). This is the simplest of the
-  // four stylometric signals identified in the May 2026 detection-
-  // research review (docs/competitive/detection-research.md): no
-  // POS tagger required, no model, pure JS.
+  // FEW unique words for the length). No POS tagger, no model, pure JS.
   //
   // Threshold tuning: flag only when the sample is large enough
   // that low TTR is meaningfully suspicious (>=200 tokens) AND TTR
   // is below 0.40 (very vocabulary-poor). Conservative on purpose;
   // false positives on short or topic-narrow human prose are easy
-  // to trigger and would drown out other signals. The detector-
-  // research lens flagged TTR as one of four stylometric add-ons;
-  // POS-bigram log-odds, function-word z-scores, and sentence-
-  // length burstiness are still TODO.
+  // to trigger and would drown out other signals.
+  // See docs/engine-history.md#stylometry-thresholds for provenance
+  // and the other planned stylometric add-ons.
   if (tokens.length >= 200) {
     const unique = new Set(tokens).size;
     const ttr = unique / tokens.length;

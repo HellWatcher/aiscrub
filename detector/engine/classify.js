@@ -24,9 +24,8 @@ function buildV2Defaults(classification, confidence) {
 }
 
 // FN-biased: false positives damage trust more than false negatives,
-// so MIXED is wide and AI_ONLY requires multiple signals. Quote from
-// GPTZero: "biases the detector to prefer making less-harmful
-// false-negative errors over false-positive errors."
+// so MIXED is wide and AI_ONLY requires multiple signals.
+// See docs/engine-history.md#trinary-calibration for the GPTZero basis.
 function classifyTrinary({ score, issues, regions, normFlags, wordCount, denseAIVocab }) {
   // Strong corroborators — each is near-dispositive on its own:
   //   - cutoff-disclaimer (LLM self-identifies as an AI)
@@ -75,9 +74,9 @@ function classifyTrinary({ score, issues, regions, normFlags, wordCount, denseAI
   // detection should never read as low-confidence noise).
 
   // Soft probability distribution. Not calibrated against a labeled
-  // corpus yet (TODO when corpus exists — see roadmap.md). Largest
-  // class is computed as `1 - others` after rounding to guarantee
-  // sum=1 exactly. Sub-1% drift would otherwise hide in toFixed.
+  // corpus yet. Largest class is computed as `1 - others` after
+  // rounding to guarantee sum=1 exactly. Sub-1% drift would otherwise
+  // hide in toFixed.
   const aiSoft = Math.min(0.97, score / 100 + totalCorrob * 0.06 + strongCorrob * 0.08);
   let p;
   if (classification === 'HUMAN_ONLY') p = { human: Math.max(0.6, 1 - aiSoft), mixed: Math.min(0.35, aiSoft * 0.8), ai: Math.min(0.1, aiSoft * 0.3) };
