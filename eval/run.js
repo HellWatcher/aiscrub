@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict";
+'use strict';
 
 // Eval harness for the deterministic detector. Runs it over the labeled corpus
 // in fixtures.json and reports precision / recall / false-positive rate, so the
@@ -15,16 +15,14 @@
 //             accuse a human" view; this is what the FP budget guards)
 //   lenient — predicted AI when classification is not HUMAN_ONLY (recall view)
 
-const fs = require("fs");
-const path = require("path");
-const AIDetector = require("../detector/patterns.js");
+const fs = require('fs');
+const path = require('path');
+const AIDetector = require('../detector/patterns.js');
 
-const fixtures = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "fixtures.json"), "utf8")
-);
-const maxFpArg = process.argv.find((a) => a.startsWith("--max-fp="));
-const maxFp = maxFpArg ? Number(maxFpArg.split("=")[1]) : NaN;
-const asJson = process.argv.includes("--json");
+const fixtures = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures.json'), 'utf8'));
+const maxFpArg = process.argv.find((a) => a.startsWith('--max-fp='));
+const maxFp = maxFpArg ? Number(maxFpArg.split('=')[1]) : NaN;
+const asJson = process.argv.includes('--json');
 
 // Score every fixture once.
 const scored = fixtures.map((f) => ({
@@ -33,9 +31,12 @@ const scored = fixtures.map((f) => ({
 }));
 
 function confusion(predictAI) {
-  let tp = 0, fp = 0, tn = 0, fn = 0;
+  let tp = 0,
+    fp = 0,
+    tn = 0,
+    fn = 0;
   for (const s of scored) {
-    const actualAI = s.label === "ai";
+    const actualAI = s.label === 'ai';
     const predAI = predictAI(s.r);
     if (actualAI && predAI) tp++;
     else if (actualAI && !predAI) fn++;
@@ -44,17 +45,20 @@ function confusion(predictAI) {
   }
   const safe = (a, b) => (b ? a / b : 1);
   return {
-    tp, fp, tn, fn,
+    tp,
+    fp,
+    tn,
+    fn,
     precision: safe(tp, tp + fp),
     recall: safe(tp, tp + fn),
-    fpRate: (fp + tn) ? fp / (fp + tn) : 0,
+    fpRate: fp + tn ? fp / (fp + tn) : 0,
     accuracy: (tp + tn) / scored.length,
   };
 }
 
 const views = {
-  strict: confusion((r) => r.document_classification === "AI_ONLY"),
-  lenient: confusion((r) => r.document_classification !== "HUMAN_ONLY"),
+  strict: confusion((r) => r.document_classification === 'AI_ONLY'),
+  lenient: confusion((r) => r.document_classification !== 'HUMAN_ONLY'),
 };
 
 // Score-threshold sweep (predicted AI when score >= T).
@@ -72,27 +76,24 @@ if (asJson) {
     console.log(
       `${name.padEnd(8)} precision ${pct(v.precision)}  recall ${pct(v.recall)}  ` +
         `FP-rate ${pct(v.fpRate)}  accuracy ${pct(v.accuracy)}  ` +
-        `(tp${v.tp} fp${v.fp} tn${v.tn} fn${v.fn})`
+        `(tp${v.tp} fp${v.fp} tn${v.tn} fn${v.fn})`,
     );
   }
-  console.log("\nscore-threshold sweep:");
+  console.log('\nscore-threshold sweep:');
   for (const s of sweep) {
     console.log(
       `  >=${String(s.threshold).padEnd(3)} precision ${pct(s.precision)}  ` +
-        `recall ${pct(s.recall)}  FP-rate ${pct(s.fpRate)}`
+        `recall ${pct(s.recall)}  FP-rate ${pct(s.fpRate)}`,
     );
   }
   // Surface any misclassified sample so failures are actionable.
   const misses = scored.filter(
-    (s) =>
-      (s.label === "ai") !== (s.r.document_classification !== "HUMAN_ONLY")
+    (s) => (s.label === 'ai') !== (s.r.document_classification !== 'HUMAN_ONLY'),
   );
   if (misses.length) {
-    console.log("\nlenient-view misses:");
+    console.log('\nlenient-view misses:');
     misses.forEach((s) =>
-      console.log(
-        `  ${s.id} (${s.label}) -> ${s.r.document_classification} score ${s.r.score}`
-      )
+      console.log(`  ${s.id} (${s.label}) -> ${s.r.document_classification} score ${s.r.score}`),
     );
   }
 }
@@ -101,11 +102,11 @@ if (!Number.isNaN(maxFp)) {
   const fpr = views.strict.fpRate;
   if (fpr > maxFp) {
     console.error(
-      `\neval: FAIL — strict FP-rate ${(fpr * 100).toFixed(0)}% exceeds budget ${(maxFp * 100).toFixed(0)}%`
+      `\neval: FAIL — strict FP-rate ${(fpr * 100).toFixed(0)}% exceeds budget ${(maxFp * 100).toFixed(0)}%`,
     );
     process.exit(1);
   }
   console.log(
-    `\neval: OK — strict FP-rate ${(fpr * 100).toFixed(0)}% within budget ${(maxFp * 100).toFixed(0)}%`
+    `\neval: OK — strict FP-rate ${(fpr * 100).toFixed(0)}% within budget ${(maxFp * 100).toFixed(0)}%`,
   );
 }

@@ -12,11 +12,19 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
+      # Dev tooling (ESLint/Prettier) from the committed lockfile. The
+      # detector runtime itself stays zero-dependency.
+      - run: npm ci
+      # Formatting + correctness.
+      - run: npm run format
+      - run: npm run lint
       # Detector engine fixtures + CATEGORIES.md contract.
       - run: npm test
       # Catalog size matches the README in every spot.
       - run: npm run check-counts
+      # File-size standard (300-line cap; data files exempt).
+      - run: npm run check-line-cap
       # Detector eval: fail if it starts false-accusing humans.
       - run: npm run eval -- --max-fp=0.15
       # Echo-detector eval: precision/recall + exact-vs-stem FP report.

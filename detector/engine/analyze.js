@@ -1,5 +1,11 @@
 const { MAX_WORDS, VALID_CONTEXT_MODES } = require('./constants');
-const { tokenize, countWords, getParagraphs, getSentences, deduplicateIssues } = require('./text-utils');
+const {
+  tokenize,
+  countWords,
+  getParagraphs,
+  getSentences,
+  deduplicateIssues,
+} = require('./text-utils');
 const { normalizeText } = require('./normalize');
 const { detectEcho } = require('./echo');
 const { buildSentenceRegions } = require('./regions');
@@ -17,7 +23,14 @@ const { runStructuralPass } = require('./passes/structural');
 // then the fixed pipeline: dedup → score → regions → stats → classify.
 function analyzeText(text, options = {}) {
   if (!text || text.trim().length === 0) {
-    return { ...buildV2Defaults('UNSCORED', 'low'), score: 0, label: 'Empty', issues: [], stats: {}, tooShort: true };
+    return {
+      ...buildV2Defaults('UNSCORED', 'low'),
+      score: 0,
+      label: 'Empty',
+      issues: [],
+      stats: {},
+      tooShort: true,
+    };
   }
 
   // Context mode gates rules that are noisy in technical writing. Modes:
@@ -57,7 +70,14 @@ function analyzeText(text, options = {}) {
 
   const wordCount = countWords(text);
   if (wordCount < 10) {
-    return { ...buildV2Defaults('UNSCORED', 'low'), score: 0, label: 'Too short', issues: [], stats: { wordCount, contextMode, contextModeFallback }, tooShort: true };
+    return {
+      ...buildV2Defaults('UNSCORED', 'low'),
+      score: 0,
+      label: 'Too short',
+      issues: [],
+      stats: { wordCount, contextMode, contextModeFallback },
+      tooShort: true,
+    };
   }
   if (wordCount > MAX_WORDS) {
     return {
@@ -115,7 +135,9 @@ function analyzeText(text, options = {}) {
   // tier1Distinct is derived from the DEDUPED list here (not in a pass).
   // Dense-AI-vocab trifecta: ≥5 distinct tier1 hits + ≥2 tier2 cluster
   // paragraphs + ≥1 transition phrase, AND ≥150 words.
-  const tier1Distinct = new Set(deduped.filter((i) => i.type === 'tier1').map((i) => (i.text || '').toLowerCase())).size;
+  const tier1Distinct = new Set(
+    deduped.filter((i) => i.type === 'tier1').map((i) => (i.text || '').toLowerCase()),
+  ).size;
   const hasTier2Cluster = tier2Clusters >= 2;
   const hasTransition = deduped.some((i) => i.type === 'transition');
   const denseAIVocab = wordCount >= 150 && tier1Distinct >= 5 && hasTier2Cluster && hasTransition;
@@ -123,7 +145,6 @@ function analyzeText(text, options = {}) {
   const trinary = classifyTrinary({
     score: normalizedScore,
     issues: deduped,
-    regions,
     normFlags: norm.flags,
     wordCount,
     denseAIVocab,

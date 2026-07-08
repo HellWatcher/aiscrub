@@ -31,11 +31,11 @@ test('plain human bug-report prose stays in Minimal range', () => {
 test('repeated Tier 1 phrase does not inflate score linearly', () => {
   const single = AIDetector.analyzeText('We delve into the landscape of many things today.');
   const fivefold = AIDetector.analyzeText(
-    'We delve into the landscape. We delve into the landscape. We delve into the landscape. We delve into the landscape. We delve into the landscape of things.'
+    'We delve into the landscape. We delve into the landscape. We delve into the landscape. We delve into the landscape. We delve into the landscape of things.',
   );
   assert.ok(
     fivefold.score <= single.score + 20,
-    `repeated phrase should not 5× the score (single=${single.score}, fivefold=${fivefold.score})`
+    `repeated phrase should not 5× the score (single=${single.score}, fivefold=${fivefold.score})`,
   );
 });
 
@@ -47,8 +47,12 @@ test('v2: probability fields sum to exactly 1.000 (no float drift)', () => {
   ];
   for (const t of texts) {
     const r = AIDetector.analyzeText(t);
-    const sum = r.class_probabilities.human + r.class_probabilities.mixed + r.class_probabilities.ai;
-    assert.ok(Math.abs(sum - 1) < 0.0005, `probabilities should sum to exactly 1.000, got ${sum} for: ${t.slice(0, 40)}...`);
+    const sum =
+      r.class_probabilities.human + r.class_probabilities.mixed + r.class_probabilities.ai;
+    assert.ok(
+      Math.abs(sum - 1) < 0.0005,
+      `probabilities should sum to exactly 1.000, got ${sum} for: ${t.slice(0, 40)}...`,
+    );
   }
 });
 
@@ -69,12 +73,17 @@ test('v2: probability sum is exactly 1 with no negative components', () => {
     assert.ok(mixed >= 0, `mixed prob negative: ${mixed}`);
     assert.ok(ai >= 0, `ai prob negative: ${ai}`);
     const sum = human + mixed + ai;
-    assert.ok(Math.abs(sum - 1) < 0.002, `sum should be ~1, got ${sum} for: ${(t || '<empty>').slice(0, 40)}`);
+    assert.ok(
+      Math.abs(sum - 1) < 0.002,
+      `sum should be ~1, got ${sum} for: ${(t || '<empty>').slice(0, 40)}`,
+    );
   }
 });
 
 test('v2: backward compat — score, label, issues, stats still present', () => {
-  const r = AIDetector.analyzeText('We delve into the landscape of leveraging robust paradigms. The team continues to navigate this comprehensive transformation.');
+  const r = AIDetector.analyzeText(
+    'We delve into the landscape of leveraging robust paradigms. The team continues to navigate this comprehensive transformation.',
+  );
   assert.ok(typeof r.score === 'number', 'score still numeric');
   assert.ok(typeof r.label === 'string', 'label still string');
   assert.ok(Array.isArray(r.issues), 'issues still array');

@@ -52,7 +52,7 @@ test('every detector type is documented in a CATEGORIES.md table', () => {
   assert.deepEqual(
     missing,
     [],
-    `detector types missing from CATEGORIES.md tables: ${missing.join(', ')}`
+    `detector types missing from CATEGORIES.md tables: ${missing.join(', ')}`,
   );
 });
 
@@ -62,7 +62,7 @@ test('every type referenced in the tables is a real detector type', () => {
   assert.deepEqual(
     stale,
     [],
-    `CATEGORIES.md references types that no longer exist: ${stale.join(', ')}`
+    `CATEGORIES.md references types that no longer exist: ${stale.join(', ')}`,
   );
 });
 

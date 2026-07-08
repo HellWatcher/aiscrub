@@ -9,7 +9,8 @@
   },
   "files": [
     "detector/patterns.js",
-    "detector/cli.js"
+    "detector/cli.js",
+    "detector/engine/**/*.js"
   ],
   "engines": {
     "node": ">=18"
@@ -21,6 +22,16 @@
     "eval:echo": "node eval/echo.js",
     "research:metaphor": "node eval/metaphor-probe.js",
     "check-counts": "node scripts/check-counts.js",
-    "guards": "node scripts/check-counts.js"
+    "check-line-cap": "node scripts/check-line-cap.js",
+    "guards": "node scripts/check-counts.js && node scripts/check-line-cap.js",
+    "lint": "eslint .",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "prettier": "^3.9.4"
   }
 }

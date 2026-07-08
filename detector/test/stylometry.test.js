@@ -33,14 +33,17 @@ back below baseline once the rollout completed. Closing the incident
 ticket now and writing up notes for the team retrospective tomorrow.`;
   const r = AIDetector.analyzeText(text);
   const types = new Set(r.issues.map((i) => i.type));
-  assert.ok(!types.has('low-ttr'), `low-ttr should not fire on natural prose, got types: ${[...types].join(', ')}`);
+  assert.ok(
+    !types.has('low-ttr'),
+    `low-ttr should not fire on natural prose, got types: ${[...types].join(', ')}`,
+  );
 });
 
 test('low-ttr does not fire on short texts (<200 tokens)', () => {
   // Same vocab-poor pattern but only ~50 tokens — below the sample-size
   // threshold. Avoids drowning short social posts in a stylometric flag
   // that needs more data to be reliable.
-  const text = ('The system shows the system improves the system. '.repeat(5));
+  const text = 'The system shows the system improves the system. '.repeat(5);
   const r = AIDetector.analyzeText(text);
   const types = new Set(r.issues.map((i) => i.type));
   assert.ok(!types.has('low-ttr'), 'low-ttr should not fire below 200 tokens');

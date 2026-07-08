@@ -17,13 +17,19 @@ function normalizeText(text) {
 
   // 1. Strip zero-width chars (ZWSP U+200B, ZWNJ U+200C, ZWJ U+200D,
   //    BOM U+FEFF, word joiner U+2060).
-  out = out.replace(/[​-‍﻿⁠]/g, () => { flags.zeroWidth++; return ''; });
+  out = out.replace(/[​-‍﻿⁠]/g, () => {
+    flags.zeroWidth++;
+    return '';
+  });
 
   // 2. Swap Cyrillic / Greek Latin-lookalike chars back to Latin so
   //    pattern matching catches obfuscated tokens.
   out = out.replace(/[Ѐ-ӿͰ-Ͽ]/g, (m) => {
     const swap = CYRILLIC_LOOKALIKES[m] ?? GREEK_LOOKALIKES[m];
-    if (swap) { flags.homoglyph++; return swap; }
+    if (swap) {
+      flags.homoglyph++;
+      return swap;
+    }
     return m;
   });
 
@@ -33,9 +39,13 @@ function normalizeText(text) {
   //    artifact shape. Markdown `**bold**` is rejected by the
   //    lookbehind/lookahead; legitimate multi-word `*italic*` is
   //    preserved because the verb whitelist is narrow.
-  const ROLEPLAY_VERBS = /^(?:nods|sighs|laughs|smiles|frowns|shrugs|grins|winks|chuckles|gasps|pauses|thinks|wonders|whispers|shouts|gestures|raises|leans|turns|looks|glances|smirks|blinks|nodding|sighing|laughing|smiling|thinking|gesturing)\b/i;
+  const ROLEPLAY_VERBS =
+    /^(?:nods|sighs|laughs|smiles|frowns|shrugs|grins|winks|chuckles|gasps|pauses|thinks|wonders|whispers|shouts|gestures|raises|leans|turns|looks|glances|smirks|blinks|nodding|sighing|laughing|smiling|thinking|gesturing)\b/i;
   out = out.replace(/(?<!\*)\*([^*\n]{1,80}?)\*(?!\*)/gu, (m, inner) => {
-    if (ROLEPLAY_VERBS.test(inner)) { flags.roleplay++; return ''; }
+    if (ROLEPLAY_VERBS.test(inner)) {
+      flags.roleplay++;
+      return '';
+    }
     return m;
   });
 

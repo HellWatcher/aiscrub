@@ -262,7 +262,8 @@ const FORMULAIC_OPENERS = [
 // capitalized. Acceptable in API docs, ML papers, news headlines. Tell
 // in marketing/personal/blog prose. Gated to "personal" / "marketing"
 // context modes (technical mode skips this check).
-const TITLE_CASE_HEADER = /^([A-Z][a-z]+(?:\s+(?:[A-Z][a-z]+|and|or|of|the|in|for|to|a|an))+\s+[A-Z][a-z]+)\s*$/gm;
+const TITLE_CASE_HEADER =
+  /^([A-Z][a-z]+(?:\s+(?:[A-Z][a-z]+|and|or|of|the|in|for|to|a|an))+\s+[A-Z][a-z]+)\s*$/gm;
 
 // ─── Parenthetical hedging asides ──────────────────────────────────
 // "(and increasingly, X)", "(or more precisely, Y)", "(though to be

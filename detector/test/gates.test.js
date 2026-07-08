@@ -34,7 +34,8 @@ test('stats fields sum to issues length', () => {
 });
 
 test('chatbot artifacts score as P0 critical', () => {
-  const text = "I hope this helps! Let me know if you need anything else. Great question! Feel free to reach out.";
+  const text =
+    'I hope this helps! Let me know if you need anything else. Great question! Feel free to reach out.';
   const r = AIDetector.analyzeText(text);
   const chatbotIssues = r.issues.filter((i) => i.type === 'chatbot');
   assert.ok(chatbotIssues.length >= 2, `expected chatbot detections, got ${chatbotIssues.length}`);
@@ -53,8 +54,16 @@ test('v2: trinary fields present on tooShort / tooLong / empty as UNSCORED', () 
   const empty = AIDetector.analyzeText('');
   const tooShort = AIDetector.analyzeText('Short text.');
   const tooLong = AIDetector.analyzeText('word '.repeat(10001));
-  for (const [name, r] of [['empty', empty], ['tooShort', tooShort], ['tooLong', tooLong]]) {
-    assert.equal(r.document_classification, 'UNSCORED', `${name}: expected UNSCORED, got ${r.document_classification}`);
+  for (const [name, r] of [
+    ['empty', empty],
+    ['tooShort', tooShort],
+    ['tooLong', tooLong],
+  ]) {
+    assert.equal(
+      r.document_classification,
+      'UNSCORED',
+      `${name}: expected UNSCORED, got ${r.document_classification}`,
+    );
     assert.equal(r.confidence_category, 'low', `${name}: expected low confidence`);
     assert.ok(r.class_probabilities, `${name}: missing class_probabilities`);
     assert.ok(Array.isArray(r.highlight_sentence_for_ai), `${name}: missing highlight array`);
@@ -66,12 +75,16 @@ test('v2: trinary fields present on tooShort / tooLong / empty as UNSCORED', () 
 });
 
 test('v2: unmappedHighlights counter surfaced in stats', () => {
-  const r = AIDetector.analyzeText('We delve into the landscape of innovation and continue to navigate the comprehensive transformation.');
+  const r = AIDetector.analyzeText(
+    'We delve into the landscape of innovation and continue to navigate the comprehensive transformation.',
+  );
   assert.equal(typeof r.stats.unmappedHighlights, 'number', 'unmappedHighlights should be numeric');
 });
 
 test('v2: stats.denseAIVocab and stats.tier1Distinct surface for observability', () => {
-  const r = AIDetector.analyzeText('We delve into the landscape with robust comprehensive seamless innovative cutting-edge solutions.');
+  const r = AIDetector.analyzeText(
+    'We delve into the landscape with robust comprehensive seamless innovative cutting-edge solutions.',
+  );
   assert.equal(typeof r.stats.denseAIVocab, 'boolean', 'denseAIVocab should be boolean');
   assert.equal(typeof r.stats.tier1Distinct, 'number', 'tier1Distinct should be number');
 });

@@ -10,11 +10,11 @@ function countWords(text) {
 }
 
 function getParagraphs(text) {
-  return text.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+  return text.split(/\n\s*\n/).filter((p) => p.trim().length > 0);
 }
 
 function getSentences(text) {
-  return text.split(/[.!?]+/).filter(s => s.trim().length > 5);
+  return text.split(/[.!?]+/).filter((s) => s.trim().length > 5);
 }
 
 function matchPatterns(text, patterns, category, severity) {
@@ -37,7 +37,7 @@ function matchPatterns(text, patterns, category, severity) {
 
 function deduplicateIssues(issues) {
   const seen = new Set();
-  return issues.filter(issue => {
+  return issues.filter((issue) => {
     const key = `${issue.type}:${issue.text.toLowerCase()}`;
     if (seen.has(key)) return false;
     seen.add(key);

@@ -135,7 +135,8 @@ function runVocabPass({ text, tokens, paragraphs, wordCount }) {
       type: 'tier3-phrase-cluster',
       text: `${distinctPhrasesHit} distinct boilerplate phrases`,
       severity: 'high',
-      suggestion: 'Several stock crypto/web3 phrases stacked in one piece. Rewrite around one specific claim or observation.',
+      suggestion:
+        'Several stock crypto/web3 phrases stacked in one piece. Rewrite around one specific claim or observation.',
     });
   }
 

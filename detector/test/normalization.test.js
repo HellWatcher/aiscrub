@@ -19,11 +19,15 @@ test('v2: Cyrillic homoglyph swap restores Tier 1 hit', () => {
   // "dеlve" uses Cyrillic 'е' (U+0435). Without normalization the token
   // 'dеlve' would not equal 'delve' and Tier 1 misses it. After
   // normalization, the Latin form fires Tier 1 AND triggers normalization-flag.
-  const text = 'In tоday’s landscape we dеlve intо the intricate tapestry оf the rоbust ecоsystem and dеep dive intо each layer with comprehensive depth.';
+  const text =
+    'In tоday’s landscape we dеlve intо the intricate tapestry оf the rоbust ecоsystem and dеep dive intо each layer with comprehensive depth.';
   const r = AIDetector.analyzeText(text);
   const types = new Set(r.issues.map((i) => i.type));
   assert.ok(types.has('normalization-flag'), 'expected normalization-flag on homoglyph cluster');
-  assert.ok(r.stats.normalization.homoglyph >= 2, `expected >=2 homoglyph swaps, got ${r.stats.normalization.homoglyph}`);
+  assert.ok(
+    r.stats.normalization.homoglyph >= 2,
+    `expected >=2 homoglyph swaps, got ${r.stats.normalization.homoglyph}`,
+  );
 });
 
 test('v2: markdown **bold** is preserved by normalize pre-pass', () => {
@@ -33,7 +37,11 @@ test('v2: markdown **bold** is preserved by normalize pre-pass', () => {
   // README / Substack post with bold runs.
   const text = '**First bold** and **another bold** plus **a third one**.';
   const norm = AIDetector.normalizeText(text);
-  assert.equal(norm.flags.roleplay, 0, `expected roleplay=0 on markdown bold, got ${norm.flags.roleplay}`);
+  assert.equal(
+    norm.flags.roleplay,
+    0,
+    `expected roleplay=0 on markdown bold, got ${norm.flags.roleplay}`,
+  );
   assert.ok(norm.text.includes('**First bold**'), 'bold marker preserved');
 });
 
@@ -43,13 +51,18 @@ test('v2: legitimate *italic phrase* is NOT stripped by roleplay rule', () => {
   // content like *italic phrase here* should survive untouched.
   const text = 'We use *italic phrase here* for emphasis and *another phrase too* in some places.';
   const norm = AIDetector.normalizeText(text);
-  assert.equal(norm.flags.roleplay, 0, `expected roleplay=0 on plain italic, got ${norm.flags.roleplay}`);
+  assert.equal(
+    norm.flags.roleplay,
+    0,
+    `expected roleplay=0 on plain italic, got ${norm.flags.roleplay}`,
+  );
   assert.ok(norm.text.includes('*italic phrase here*'), 'italic preserved');
 });
 
 test('v2: *roleplay action verb* IS stripped', () => {
   // The actual chat-model artifact — verb-led action description.
-  const text = 'I think about the problem *nods thoughtfully* and consider the options *sighs deeply* before answering.';
+  const text =
+    'I think about the problem *nods thoughtfully* and consider the options *sighs deeply* before answering.';
   const norm = AIDetector.normalizeText(text);
   assert.ok(norm.flags.roleplay >= 2, `expected ≥2 roleplay strips, got ${norm.flags.roleplay}`);
 });
@@ -61,7 +74,11 @@ test('v2: single ZWSP does not flip to AI_ONLY (hair-trigger fix)', () => {
   const zwsp = '​';
   const text = `Our team shipped a fix on Monday${zwsp} afternoon. Tests pass and the deploy is green. Everything looks good. Plain human text with one accidental zero-width character pasted from a Notion doc.`;
   const r = AIDetector.analyzeText(text);
-  assert.notEqual(r.document_classification, 'AI_ONLY', `single ZWSP should not flip to AI_ONLY, got ${r.document_classification}`);
+  assert.notEqual(
+    r.document_classification,
+    'AI_ONLY',
+    `single ZWSP should not flip to AI_ONLY, got ${r.document_classification}`,
+  );
 });
 
 test('v2: blockquoted AI text does not penalize the human wrapper', () => {
@@ -79,12 +96,21 @@ test('v2: blockquoted AI text does not penalize the human wrapper', () => {
   ].join('\n');
   const r = AIDetector.analyzeText(text);
   assert.ok(r.stats.quotedLines >= 3, `expected quotedLines >= 3, got ${r.stats.quotedLines}`);
-  assert.notEqual(r.document_classification, 'AI_ONLY', `human wrapping AI quote should not classify AI_ONLY, got ${r.document_classification}`);
+  assert.notEqual(
+    r.document_classification,
+    'AI_ONLY',
+    `human wrapping AI quote should not classify AI_ONLY, got ${r.document_classification}`,
+  );
 });
 
 test('v2: single-line shell prompt > is NOT stripped as blockquote', () => {
   // Blockquote strip now requires ≥2 consecutive lines.
-  const text = 'To check the directory:\n\n> ls -la\n\nThen review the output and look for any unexpected files. The team uses this command frequently when debugging deployment issues that involve filesystem permissions.';
+  const text =
+    'To check the directory:\n\n> ls -la\n\nThen review the output and look for any unexpected files. The team uses this command frequently when debugging deployment issues that involve filesystem permissions.';
   const r = AIDetector.analyzeText(text);
-  assert.equal(r.stats.quotedLines, 0, `single > line should not strip, got quotedLines=${r.stats.quotedLines}`);
+  assert.equal(
+    r.stats.quotedLines,
+    0,
+    `single > line should not strip, got quotedLines=${r.stats.quotedLines}`,
+  );
 });

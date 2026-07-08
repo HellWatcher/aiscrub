@@ -12,7 +12,8 @@ function runNormalizationFlagPass(normFlags) {
       type: 'normalization-flag',
       text: `${normFlags.zeroWidth} zero-width + ${normFlags.homoglyph} homoglyph swap${normFlags.homoglyph === 1 ? '' : 's'}`,
       severity: 'critical',
-      suggestion: 'Text contains invisible/lookalike chars typical of AI-humanizer bypass tools. Re-type from your own keyboard.',
+      suggestion:
+        'Text contains invisible/lookalike chars typical of AI-humanizer bypass tools. Re-type from your own keyboard.',
     });
   }
   if (normFlags.roleplay >= 2) {

@@ -41,7 +41,8 @@ function runStructuralPass({ text, wordCount }) {
   // "advanced") that share the same surface form.
   const lines = text.split(/\r?\n/);
   const bulletRe = /^\s*(?:\*|-|•|\+)\s+(.+)$/;
-  const verbRe = /\b(?:is|are|was|were|has|have|had|will|would|should|must|do|does|did|can|could|may|might|am|been|being)\b/i;
+  const verbRe =
+    /\b(?:is|are|was|were|has|have|had|will|would|should|must|do|does|did|can|could|may|might|am|been|being)\b/i;
   const fenceRe = /^\s*(?:```|~~~)/;
   let run = [];
   let blankStreak = 0;
@@ -57,7 +58,8 @@ function runStructuralPass({ text, wordCount }) {
           type: 'bullet-np-list',
           text: `${run.length}-item bullet list of bare noun phrases`,
           severity: 'high',
-          suggestion: 'Convert to a prose paragraph or merge items. Long lists of bare adj+noun pairs read as AI scaffolding.',
+          suggestion:
+            'Convert to a prose paragraph or merge items. Long lists of bare adj+noun pairs read as AI scaffolding.',
         });
       }
     }
