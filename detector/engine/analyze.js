@@ -94,8 +94,8 @@ function analyzeText(text, options = {}) {
   issues.push(...detectEcho(text, options));
 
   // ── Fixed pipeline: dedup → score → regions → stats → classify ───
-  // Dedup runs FIRST (documented v2 fix) so scoring, region-building,
-  // and stats all operate on the same distinct issue list the user sees.
+  // Dedup runs FIRST so scoring, region-building, and stats all operate
+  // on the same distinct issue list the user sees.
   const deduped = deduplicateIssues(issues);
   const { normalizedScore } = scoreIssues(deduped, wordCount);
   const label = getLabel(normalizedScore);

@@ -1,13 +1,10 @@
 const { weightFor } = require('./constants');
 
-// Score from the deduped issue list.
-// Previously rawScore was accumulated inline per pattern hit, so
-// repeated hits of the same phrase (or overlapping matches) inflated
-// the score while the displayed issue list was deduplicated. That
-// produced the UX regression where a "heavy AI patterns" label sat
-// above a list of two items. Now the dedup runs first, then each
-// distinct issue contributes its category weight — so the number
-// reflects the same signals the user actually sees.
+// Score from the deduped issue list. Dedup runs before scoring so each
+// distinct issue contributes its category weight exactly once — the
+// number reflects the same signals the user sees, not inflated counts
+// from repeated or overlapping matches of the same phrase.
+// See docs/engine-history.md#scoring-and-dedup-ordering.
 function scoreIssues(deduped, wordCount) {
   let rawScore = 0;
   for (const issue of deduped) {

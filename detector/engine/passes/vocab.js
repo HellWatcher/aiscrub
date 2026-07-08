@@ -71,9 +71,9 @@ function runVocabPass({ text, tokens, paragraphs, wordCount }) {
     const canonical = TIER3_LOOKUP.get(token);
     if (canonical) tier3Counts[canonical] = (tier3Counts[canonical] || 0) + 1;
   }
-  // Flag at 3% of word count, but never below 3 occurrences. Previous
-  // floor of 1 meant a 50-word text with one "significant" got flagged
-  // as Tier 3 overuse, which was noise.
+  // Flag at 3% of word count, but never below 3 occurrences — the floor
+  // of 3 keeps a single "significant" in a short text from reading as
+  // overuse. See docs/engine-history.md#tier-3-density.
   const densityThreshold = Math.max(3, Math.floor(wordCount * 0.03));
   for (const [word, count] of Object.entries(tier3Counts)) {
     if (count >= densityThreshold) {

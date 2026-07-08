@@ -12,9 +12,7 @@ function runStructuralPass({ text, wordCount }) {
   // punctuation, line breaks). URL fragments are already excluded
   // because the char immediately before `#` in a URL path is always
   // a word char (e.g. `example.com/page#section` — `e` before `#`).
-  // Earlier char class `[\s\\]` had a literal backslash and silently
-  // missed hashtags after sentence punctuation; an interim `[\s]` fix
-  // on origin only caught whitespace-preceded tags.
+  // See docs/engine-history.md#hashtag-and-bullet-np for the char-class fix history.
   const hashtagMatches = text.match(/(?:^|\W)#\w[\w-]*/g) || [];
   if (hashtagMatches.length >= 6) {
     issues.push({
