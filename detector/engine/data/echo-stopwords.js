@@ -1,0 +1,21 @@
+// ─── Echo (close word/root repetition) ─────────────────────────────
+// Closed-class words repeat constantly and must never count as an echo.
+// Reused from the function-word list but trimmed to what's relevant for
+// content-word echo detection (issue #4). Anaphora like "where my value
+// is and where it stays" is handled for free: "where" is a stopword.
+const ECHO_STOPWORDS = new Set([
+  'the', 'a', 'an', 'and', 'or', 'nor', 'but', 'so', 'yet', 'for', 'of',
+  'to', 'in', 'on', 'at', 'by', 'with', 'from', 'as', 'is', 'are', 'was',
+  'were', 'be', 'been', 'being', 'have', 'has', 'had', 'do', 'does', 'did',
+  'will', 'would', 'should', 'could', 'may', 'might', 'must', 'can', 'this',
+  'that', 'these', 'those', 'it', 'its', 'they', 'them', 'their', 'there',
+  'here', 'we', 'our', 'us', 'i', 'you', 'your', 'my', 'me', 'he', 'she',
+  'his', 'her', 'him', 'not', 'no', 'if', 'then', 'than', 'when', 'where',
+  'which', 'who', 'whom', 'what', 'how', 'why', 'because', 'about', 'into',
+  'over', 'under', 'out', 'up', 'down', 'off', 'too', 'very', 'just', 'more',
+  'most', 'some', 'any', 'all', 'each', 'every', 'own', 'only', 'also',
+  'even', 'still', 'rather', 'much', 'many', 'one', 'such', 'both', 'either',
+  "it's", "i'm", "i'd", "don't", "can't", "won't", "that's", "there's",
+]);
+
+module.exports = { ECHO_STOPWORDS };
