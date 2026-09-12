@@ -12,6 +12,8 @@ const files = [
   './gates.test.js',
   './scoring.test.js',
   './vocab-phrases.test.js',
+  './newer-phrases.test.js',
+  './newer-phrases-negative.test.js',
   './structural.test.js',
   './stylometry.test.js',
   './normalization.test.js',

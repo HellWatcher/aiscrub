@@ -1,5 +1,12 @@
 const { tokenize } = require('../text-utils');
-const { TIER1, TIER1_PHRASES, TIER2, TIER3_LOOKUP, TIER3_PHRASES } = require('../data/lexicon');
+const {
+  TIER1,
+  TIER1_PHRASES,
+  TIER2,
+  TIER2_CONDITIONAL,
+  TIER3_LOOKUP,
+  TIER3_PHRASES,
+} = require('../data/lexicon');
 
 // Vocabulary passes: Tier 1 words + phrases, Tier 2 clusters, Tier 3
 // density, and the Tier 3 multi-word phrase + cluster detection.
@@ -12,7 +19,7 @@ function runVocabPass({ text, tokens, paragraphs, wordCount }) {
   // ── 1. Tier 1 words ──────────────────────────────────────────
   const tier1Found = new Set();
   for (const token of tokens) {
-    if (TIER1[token] && !tier1Found.has(token)) {
+    if (Object.hasOwn(TIER1, token) && !tier1Found.has(token)) {
       tier1Found.add(token);
       issues.push({
         type: 'tier1',
@@ -34,9 +41,11 @@ function runVocabPass({ text, tokens, paragraphs, wordCount }) {
       if (tier1Found.has(lower)) continue;
       tier1Found.add(lower);
       issues.push({
-        type: 'tier1',
+        // Clarity-band entries are wordiness edits, not frequency evidence.
+        // Same fix, weaker claim — see the Tier 1A/1B split in CATEGORIES.md.
+        type: phrase.clarity ? 'tier1-clarity' : 'tier1',
         text: match[0],
-        severity: 'high',
+        severity: phrase.clarity ? 'medium' : 'high',
         suggestion: phrase.replace,
       });
     }
@@ -47,9 +56,17 @@ function runVocabPass({ text, tokens, paragraphs, wordCount }) {
   for (const para of paragraphs) {
     const paraTokens = tokenize(para);
     const found = [];
+    const suggestions = {};
     for (const token of paraTokens) {
-      if (TIER2[token] && !found.includes(token)) {
+      if (Object.hasOwn(TIER2, token) && !found.includes(token)) {
         found.push(token);
+        suggestions[token] = TIER2[token];
+      }
+    }
+    for (const cond of TIER2_CONDITIONAL) {
+      if (!found.includes(cond.word) && cond.pattern.test(para)) {
+        found.push(cond.word);
+        suggestions[cond.word] = cond.suggestion;
       }
     }
     if (found.length >= 2) {
@@ -59,7 +76,7 @@ function runVocabPass({ text, tokens, paragraphs, wordCount }) {
           type: 'tier2',
           text: word,
           severity: 'medium',
-          suggestion: TIER2[word],
+          suggestion: suggestions[word],
         });
       }
     }

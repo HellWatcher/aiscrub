@@ -1,3 +1,17 @@
+const { maskCode } = require('../text-utils');
+
+// A non-social `#tag` we should never count toward the stuffing threshold:
+// an all-digit reference (`#88` issue number), a 6/8-char hex colour that
+// contains at least one digit (so `#fff`/`#abc` word-like triples still
+// don't collide with real short tags), or a C-preprocessor directive
+// (`#include`, `#define`, ...).
+const HEX_COLOUR = /^(?=[0-9a-f]*\d)(?:[0-9a-f]{6}|[0-9a-f]{8})$/i;
+const CPP_DIRECTIVE =
+  /^(?:include|define|undef|if|ifdef|ifndef|elif|else|endif|pragma|error|warning|line)$/;
+function isSocialTag(tag) {
+  return !/^\d+$/.test(tag) && !HEX_COLOUR.test(tag) && !CPP_DIRECTIVE.test(tag);
+}
+
 // Structural / formatting passes: hashtag stuffing, bullet-NP lists,
 // em-dash, bold overuse. Takes { text, wordCount }, returns issues.
 function runStructuralPass({ text, wordCount }) {
@@ -12,8 +26,14 @@ function runStructuralPass({ text, wordCount }) {
   // punctuation, line breaks). URL fragments are already excluded
   // because the char immediately before `#` in a URL path is always
   // a word char (e.g. `example.com/page#section` — `e` before `#`).
+  // Code is masked and non-tag `#` forms are subtracted first (via
+  // maskCode/isSocialTag) so a changelog paragraph citing six issue
+  // numbers, a palette listing six hex colours, or a header with six
+  // `#include` lines doesn't score as a hashtag block.
   // See docs/engine-history.md#hashtag-and-bullet-np for the char-class fix history.
-  const hashtagMatches = text.match(/(?:^|\W)#\w[\w-]*/g) || [];
+  const hashtagMatches = [...maskCode(text).matchAll(/(?:^|\W)#(\w[\w-]*)/g)].filter((m) =>
+    isSocialTag(m[1]),
+  );
   if (hashtagMatches.length >= 6) {
     issues.push({
       type: 'hashtag-stuff',

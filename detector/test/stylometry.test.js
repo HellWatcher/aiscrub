@@ -8,7 +8,7 @@ test('low-ttr fires on a 200+ token text with narrow vocabulary', () => {
   // Vocabulary-poor synthetic sample: same 11-word sentence repeated.
   // ~200 tokens, ~11 unique = ~5% TTR. Well under the 40% threshold.
   // Stylometric signal from the May 2026 detection-research review
-  // (docs/competitive/detection-research.md).
+  // (docs/engine-history.md).
   const sentence = 'The system shows the system improves the system every iteration. ';
   const text = sentence.repeat(20);
   const r = AIDetector.analyzeText(text);

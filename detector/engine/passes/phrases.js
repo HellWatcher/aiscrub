@@ -1,4 +1,4 @@
-const { matchPatterns } = require('../text-utils');
+const { matchPatterns, fenceRanges, inFenceRange } = require('../text-utils');
 const {
   TRANSITIONS,
   CHATBOT_ARTIFACTS,
@@ -25,8 +25,19 @@ const {
   REAL_ACTUAL_INFLATION,
   FORMULAIC_OPENERS,
   TITLE_CASE_HEADER,
+  FUNCTION_WORD,
+  MD_HEADING_PREFIX,
   PARENTHETICAL_HEDGE,
   CONFIDENCE_CALIBRATION,
+  LINGERING_ATTENTION,
+  SOCIAL_CTA_CLOSER,
+  SPECULATIVE_OPENERS,
+  LAUNCH_INTROS,
+  CROWD_CONTRAST,
+  FAKE_CASUAL_PROPS,
+  PERFORMED_INSIGHT,
+  NEGATION_CHAIN,
+  DEV_BLOG_BOILERPLATE,
 } = require('../data/patterns');
 
 // All the matchPatterns-based phrase passes, plus the mode-gated
@@ -63,18 +74,36 @@ function runPhrasesPass({ text, contextMode }) {
   issues.push(...matchPatterns(text, FORMULAIC_OPENERS, 'formulaic-opener', 'high'));
   issues.push(...matchPatterns(text, PARENTHETICAL_HEDGE, 'parenthetical-hedge', 'medium'));
 
+  // ── Ported from upstream avoid-ai-writing v3.34.0 ────────────────
+  issues.push(...matchPatterns(text, LINGERING_ATTENTION, 'lingering-attention', 'medium'));
+  issues.push(...matchPatterns(text, SOCIAL_CTA_CLOSER, 'social-cta-closer', 'high'));
+  issues.push(...matchPatterns(text, PERFORMED_INSIGHT, 'performed-insight', 'medium'));
+  issues.push(...matchPatterns(text, NEGATION_CHAIN, 'negation-chain', 'high'));
+  issues.push(...matchPatterns(text, DEV_BLOG_BOILERPLATE, 'dev-blog-boilerplate', 'medium'));
+  issues.push(...matchPatterns(text, SPECULATIVE_OPENERS, 'speculative-opener', 'high'));
+  issues.push(...matchPatterns(text, LAUNCH_INTROS, 'launch-intro', 'high'));
+  issues.push(...matchPatterns(text, CROWD_CONTRAST, 'crowd-contrast', 'medium'));
+  issues.push(...matchPatterns(text, FAKE_CASUAL_PROPS, 'fake-casual-prop', 'high'));
+
   // Title-case headers — gated to marketing/personal/general modes
   // (technical mode legitimately uses Title Case section headers).
   if (contextMode !== 'technical') {
     const titleHits = matchPatterns(text, [TITLE_CASE_HEADER], 'title-case-header', 'medium');
-    // Drop matches that look like proper-noun titles (single line, all
-    // tokens capitalized incl. function words) — that's headline style,
-    // not the AI-section-header tell which has mid-sentence "And".
+    // Strip an optional leading `#{1,6}` markdown-heading prefix before
+    // the word-count guard, then require an INTERIOR (not leading)
+    // function word — a proper-noun title ("The Great Gatsby") starts
+    // with one and would false-positive, but the AI-section-header tell
+    // ("Building And Deploying The Service") always has one mid-sentence.
     const filtered = titleHits.filter((h) => {
-      const tokens = h.text.split(/\s+/);
-      return tokens.length >= 4 && /\b(?:And|Or|Of|The|In|For|To|A|An)\b/.test(h.text);
+      const title = h.text.replace(MD_HEADING_PREFIX, '');
+      const tokens = title.trim().split(/\s+/);
+      if (tokens.length < 4) return false;
+      return FUNCTION_WORD.test(tokens.slice(1).join(' '));
     });
-    issues.push(...filtered);
+    // Exclude anything inside a fenced code block — a Markdown-heavy
+    // technical doc can quote a Title Case example inside a fence.
+    const fences = filtered.length ? fenceRanges(text) : [];
+    issues.push(...filtered.filter((h) => !inFenceRange(fences, h.index)));
   }
 
   // Confidence calibration is only flagged when it stacks (3+ instances).

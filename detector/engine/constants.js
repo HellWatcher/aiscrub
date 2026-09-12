@@ -72,6 +72,28 @@ const ISSUE_WEIGHTS = {
   'ai-placeholder': 10,
   'ai-citation-markup': 15,
   'ai-utm-source': 12,
+  // ─── Ported from upstream avoid-ai-writing v3.34.0 ──────────────
+  // Clarity-band Tier 1: same cadence as tier1 but a wordiness fix, not
+  // AI-frequency evidence — weighted like tier2 so it can't push a
+  // document toward an AI classification on its own.
+  'tier1-clarity': 3,
+  'lingering-attention': 3,
+  // Engagement-bait closers, speculative-scenario openers, launch-copy
+  // intros, and fake-casual props are near-dispositive single hits in
+  // marketing/social copy — weighted high like the other structural
+  // cluster signals above.
+  'social-cta-closer': 8,
+  'performed-insight': 3,
+  'negation-chain': 5,
+  'dev-blog-boilerplate': 3,
+  'speculative-opener': 8,
+  'launch-intro': 8,
+  'crowd-contrast': 6,
+  'fake-casual-prop': 8,
+  // Score-neutral: a curated hyphenation-style fix, not AI-origin
+  // evidence. Surfaced in issues[] for the editor but never affects
+  // the score or classification — see docs/engine-history.md.
+  'unnecessary-hyphenation': 0,
 };
 
 // Single source of truth for the `ISSUE_WEIGHTS[type] ?? 2` default. Routed
@@ -134,6 +156,17 @@ const TYPE_LABELS = {
   'ai-placeholder': 'Unfilled placeholder',
   'ai-citation-markup': 'Chatbot citation markup leak',
   'ai-utm-source': 'AI-tool URL parameter',
+  'tier1-clarity': 'Wordiness',
+  'lingering-attention': 'Lingering-attention claim',
+  'social-cta-closer': 'Engagement-bait closer',
+  'speculative-opener': 'Speculative scenario opener',
+  'launch-intro': 'Launch-copy introduction',
+  'crowd-contrast': 'Dramatized crowd contrast',
+  'fake-casual-prop': 'Fake-casual prop',
+  'unnecessary-hyphenation': 'Unnecessary hyphenation',
+  'performed-insight': 'Performed-insight phrase',
+  'negation-chain': 'Negation chain',
+  'dev-blog-boilerplate': 'Dev-blog boilerplate',
 };
 
 // Upper bound for one scan. Above this we bail rather than running all

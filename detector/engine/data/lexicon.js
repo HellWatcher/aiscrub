@@ -18,7 +18,6 @@ const TIER1 = {
   seamlessly: 'smoothly, easily',
   'game-changer': 'describe what changed',
   'game-changing': 'describe what changed',
-  utilize: 'use',
   nestled: 'is located, sits',
   vibrant: 'describe what makes it active',
   thriving: 'growing, active',
@@ -37,9 +36,6 @@ const TIER1 = {
   synergy: 'describe the combined effect',
   synergies: 'describe the combined effect',
   interplay: 'relationship, connection',
-  commence: 'start, begin',
-  ascertain: 'find out, determine',
-  endeavor: 'effort, attempt, try',
   symphony: 'describe the coordination',
   embrace: 'adopt, accept, use',
 };
@@ -66,11 +62,38 @@ const TIER1_PHRASES = [
   { pattern: /\bthought\s+leader(?:ship)?\b/gi, replace: 'expert, authority' },
   { pattern: /\bbest\s+practices\b/gi, replace: 'what works, proven methods' },
   { pattern: /\bat\s+its\s+core\b/gi, replace: 'cut, just state it' },
-  { pattern: /\bin\s+order\s+to\b/gi, replace: 'to' },
-  { pattern: /\bdue\s+to\s+the\s+fact\s+that\b/gi, replace: 'because' },
-  { pattern: /\bserves\s+as\b/gi, replace: 'is' },
-  { pattern: /\bfeatures\b/gi, replace: 'has, includes', filter: true },
-  { pattern: /\bboasts\b/gi, replace: 'has' },
+
+  // ─── Tier 1B: wordiness (clarity), not AI-frequency evidence ────────
+  // Same "always flag" cadence as the rest of Tier 1, but these are
+  // inflated/roundabout phrasing rather than a lexical AI tell — a human
+  // editor would mark them for concision regardless of who wrote the
+  // draft. Kept out of the dense-vocabulary signal (a different `type`
+  // string than 'tier1' already excludes them) and weighted like tier2
+  // in constants.js so a clarity fix cannot push a document toward an
+  // AI classification.
+  { pattern: /\bin\s+order\s+to\b/gi, replace: 'to', clarity: true },
+  { pattern: /\bdue\s+to\s+the\s+fact\s+that\b/gi, replace: 'because', clarity: true },
+  { pattern: /\bserves\s+as\b/gi, replace: 'is', clarity: true },
+  { pattern: /\bfeatures\b/gi, replace: 'has, includes', filter: true, clarity: true },
+  { pattern: /\bboasts\b/gi, replace: 'has', clarity: true },
+  { pattern: /\bpresents\b/gi, replace: 'is, offers, shows', filter: true, clarity: true },
+  { pattern: /\butiliz(?:e|es|ing|ed)\b/gi, replace: 'use', clarity: true },
+  { pattern: /\bcommenc(?:e|es|ing|ed)\b/gi, replace: 'start, begin', clarity: true },
+  { pattern: /\bascertain(?:s|ing|ed)?\b/gi, replace: 'find out, determine', clarity: true },
+  { pattern: /\bendeavou?r(?:s|ing|ed)?\b/gi, replace: 'effort, attempt, try', clarity: true },
+
+  // Hyphen required. The unhyphenated "load bearing" is ordinary English —
+  // "the load bearing down on the bridge" — where `bearing` is a participle,
+  // not part of a compound modifier. The tell is always hyphenated.
+  //
+  // Only match an immediately following abstract noun from this seed list.
+  // Unknown nouns, mixed physical/abstract nouns, and predicative uses pass:
+  // precision over recall. Keep the lookahead out of the matched span.
+  {
+    pattern:
+      /\bload-bearing\b(?=[ \t]+(?:assumptions?|claims?|invariants?|premises?|constraints?|dependenc(?:y|ies)|arguments?|abstractions?)\b)/gi,
+    replace: 'essential, critical, or say what breaks if you remove it',
+  },
 ];
 
 // ─── Tier 2: Flag in clusters (2+ per paragraph) ──────────────────
@@ -118,7 +141,23 @@ const TIER2 = {
   underpinning: 'basis, foundation',
   underpinnings: 'basis, foundations',
   'paradigm-shifting': 'describe what shifted',
+  quietly: 'cut, or name the concrete contrast',
 };
+
+// Conditional Tier 2 entries: everyday words whose AI tell is a specific
+// significance collocation, not the word itself. They join a paragraph's
+// Tier 2 cluster only when the collocation matches — bare uses ("deeply
+// nested JSON", "cares deeply") never count, because the base rate of
+// these words in innocent prose is far higher than the rest of the table
+// and an unconditional entry measurably flags clean human writing.
+const TIER2_CONDITIONAL = [
+  {
+    word: 'deeply',
+    pattern:
+      /\bdeeply\s+(?:integrated|committed|rooted|personal|human|flawed|resonant|transformative|interconnected|ingrained|embedded|meaningful)\b/i,
+    suggestion: 'cut, or name what specifically runs deep',
+  },
+];
 
 // ─── Tier 3: Flag by density ───────────────────────────────────────
 const TIER3 = [
@@ -143,6 +182,12 @@ const TIER3 = [
   'world-class',
   'state-of-the-art',
   'best-in-class',
+  // `verbatim` is usually redundant with the verb it modifies ("copies X
+  // verbatim" = "copies X"). It has a genuine term-of-art sense in legal,
+  // research, and QA registers ("verbatim transcript"), so it lives at
+  // Tier 3: density-gated, it only fires on overuse, not on a single
+  // legitimate use.
+  'verbatim',
 ];
 
 // Multi-word Tier 3 phrases. Density-gated like single Tier 3 words because
@@ -177,6 +222,7 @@ module.exports = {
   TIER1,
   TIER1_PHRASES,
   TIER2,
+  TIER2_CONDITIONAL,
   TIER3,
   TIER3_PHRASES,
   TIER3_LOOKUP,

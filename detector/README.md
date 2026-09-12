@@ -10,11 +10,11 @@ together they are the executable expression of this skill's pattern rules: a
 zero-dependency, build-step-free detection engine (Node `>=18`) that scores text
 for AI-writing tells.
 
-The skill's `SKILL.md` is the human-readable catalog of rules; this engine is
-the deterministic, testable implementation of the regex-detectable subset, plus
-stylometric and AI-tool-fingerprint detectors that don't make sense as prose.
-See [`CATEGORIES.md`](./CATEGORIES.md) for the rule ↔ category mapping that keeps
-the two in sync.
+[`../references/patterns.md`](../references/patterns.md) is the human-readable
+catalog of rules; this engine is the deterministic, testable implementation of
+the regex-detectable subset, plus stylometric and AI-tool-fingerprint detectors
+that don't make sense as prose. See [`CATEGORIES.md`](./CATEGORIES.md) for the
+rule ↔ category mapping that keeps the two in sync.
 
 ## Run it
 
