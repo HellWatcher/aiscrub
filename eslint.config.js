@@ -44,6 +44,7 @@ module.exports = [
   // that the DATA-file exemption lives in exactly one place.
   prettier,
   {
-    ignores: ['node_modules/', 'package-lock.json'],
+    // docs/tmp/ holds gitignored vendored upstream copies used for porting research.
+    ignores: ['node_modules/', 'package-lock.json', 'docs/'],
   },
 ];
