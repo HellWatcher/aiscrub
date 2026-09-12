@@ -84,12 +84,30 @@ audit covers all three.
 **P0, credibility killers (fix immediately):** cutoff disclaimers, chatbot
 artifacts, citation-markup leaks and AI-tool URL params, unfilled placeholders,
 vague attributions without sources, fabricated specifics, significance inflation
-on routine events.
+on routine events, acknowledgment loops that restate the prompt.
 
 **P1, obvious AI smell (fix before publishing):** Tier 1 vocabulary, template and
 slot-fill phrases, "let's" openers, synonym cycling, formulaic openings, bold
-overuse, any em dash, parataxis, hashtag stuffing.
+overuse, any em dash, parataxis, hashtag stuffing, narrated candor,
+lingering-attention claims, social endorsement closers, launch-copy
+introductions, moral-adjective category errors, invented contrast-pair
+mirroring.
 
 **P2, stylistic polish (fix when time allows):** generic conclusions, rule of
 three, uniform paragraph length, copula avoidance, transition stacking,
-confidence-calibration density.
+confidence-calibration density, unnecessary hyphenation, transformation crutch,
+false agency, negation chains below the three-item threshold.
+
+## Guardrails on the rewrite
+
+The rewrite may only remove or restate; it never adds facts. If a pattern is
+removed (a vague attribution, a manufactured punchline, a "this matters because"
+with nothing behind it), the fix is to drop the claim or ask the author for the
+specific, not to invent a source, a number, a date, or a failure case to fill
+the slot. A rewrite that scores higher because it fabricated a detail has failed
+the gate no matter what the number says.
+
+Never inject the opposite tells to sound human: fake first person ("I remember
+when..."), manufactured stakes, forced contrarianism, performed candor ("I will
+be honest here"), em-dash theatrics, staccato one-liners in place of the cut
+fragments, or invented specifics. Plain and neutral is a legitimate human voice.

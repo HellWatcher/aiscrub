@@ -1,6 +1,6 @@
 ---
 name: aiscrub
-version: 2.0.0
+version: 2.1.0
 description: |
   Remove the tells of AI-generated writing while keeping the author's voice.
   Use when drafting, editing, reviewing, or auditing prose, or when asked to
@@ -63,7 +63,7 @@ If the writer gives you a sample of their own writing, read it before rewriting.
 
 **Voice profiles** set how the prose should sound: `casual`, `professional`, `technical`, `warm`, `blunt`. **Context profiles** set how strict to be for the audience: `linkedin`, `blog`, `technical-blog`, `investor-email`, `docs`, `casual`, and `code`. They are independent axes (blunt for a blog, warm for docs). Where they govern the same rule and disagree, resolve toward the stricter. If no profile is named, infer from the input and say which you used. Definitions and the per-profile tolerance matrix live in [references/profiles.md](references/profiles.md).
 
-For source, diffs, commits, PRs, and tests, the `code` profile turns on the code-and-repository-artifacts patterns (#61-68 in [references/patterns.md](references/patterns.md)) and relaxes prose-only rules. Patterns that touch executable logic (#65 TODO theater, #67 over-defensive ceremony) are flag-only: report the smell and propose a fix, never silently cut a guard or a deferred-work marker.
+For source, diffs, commits, PRs, and tests, the `code` profile turns on the code-and-repository-artifacts patterns (#80-87 in [references/patterns.md](references/patterns.md)) and relaxes prose-only rules. Patterns that touch executable logic (#84 TODO theater, #86 over-defensive ceremony) are flag-only: report the smell and propose a fix, never silently cut a guard or a deferred-work marker.
 
 ## Personality and soul
 
@@ -73,9 +73,9 @@ Avoiding AI patterns is only half the work. Sterile, voiceless prose is its own 
 
 When triaging a long document, fix by tier (full detail in [references/scoring.md](references/scoring.md)):
 
-- **P0, credibility killers:** cutoff disclaimers, chatbot artifacts, citation-markup leaks, vague attributions, fabricated specifics, significance inflation.
-- **P1, obvious AI smell:** Tier 1 vocabulary, template phrases, "let's" openers, synonym cycling, formulaic openings, bold overuse, any em dash.
-- **P2, stylistic polish:** generic conclusions, rule of three, uniform paragraph length, copula avoidance, transition stacking.
+- **P0, credibility killers:** cutoff disclaimers, chatbot artifacts and acknowledgment loops, citation-markup leaks, vague attributions, fabricated specifics, significance inflation.
+- **P1, obvious AI smell:** Tier 1 vocabulary, template phrases, "let's" openers, synonym cycling, formulaic openings, bold overuse, any em dash, narrated candor, lingering-attention claims, social endorsement closers, launch-copy introductions, moral-adjective category errors, contrast-pair mirroring.
+- **P2, stylistic polish:** generic conclusions, rule of three, uniform paragraph length, copula avoidance, transition stacking, unnecessary hyphenation, transformation crutch, false agency.
 
 Use P0+P1 for a quick pass; a full audit covers all three.
 
@@ -97,9 +97,13 @@ Use P0+P1 for a quick pass; a full audit covers all three.
 
 If a draft never clears 35/50 after a couple of passes, hand back the best version with a note on what is holding the score down rather than looping forever. Never inflate the score to escape the gate.
 
+**Never fabricate, never inject.** The rewrite removes or restates; it does not add facts. Cutting a vague attribution or an empty punchline means dropping the claim or asking the author, not inventing a source, a number, or a failure case. And do not swap in the opposite tells to sound human: no fake first person, manufactured stakes, forced contrarianism, performed candor, em-dash theatrics, or staccato one-liners in place of the fragments you cut. Full guardrails in [references/scoring.md](references/scoring.md).
+
 ## Detection guidance
 
 Polish is not proof of AI. A clean human writer can trip several patterns with no machine involved. Not reliable tells on their own: perfect grammar, mixed registers, dry prose, formal vocabulary, one common transition word, curly quotes (most editors auto-curl), unsourced claims, clean template formatting. Look for **clusters**. A lone transition word means nothing; an em dash plus a forced rule of three plus "vibrant tapestry" plus a "Conclusion" section is a confession. Em dashes are a strong tell on their own and are always flagged for replacement.
+
+**Tiering the tells.** Five survive a competent rewrite pass and carry weight alone: the not-X-but-Y contrast, the one-line paragraph closer, the em dash, the forced triad, and the bold inline label. Most other patterns are weak alone and need company: treat one hit as noise and three different weak tells in one passage as a finding. Text dated before November 30, 2022 was not written by a chatbot, whatever it trips. As a safeguard against false positives on non-native and formal writers, require several distinct tells together before calling a passage machine-written; a single category at density is a style note, not a verdict.
 
 Preserve signs of a real person: specific hard-to-fabricate detail, mixed feelings and unresolved tension, dated or subculture-bound references, first-person choices the writer can defend, genuine asides and self-corrections, and real variety in sentence length. When writing _about_ AI patterns, quoted examples are exempt; only flag the author's own prose, not cited examples of bad writing.
 

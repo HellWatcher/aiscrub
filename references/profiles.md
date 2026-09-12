@@ -31,7 +31,7 @@ them; if a sample uses colons freely, drop it to `skip`.
 - **`investor-email`** — high-trust audience; tighten everything, promotional language is the biggest risk.
 - **`docs`** — documentation and READMEs; clarity over voice.
 - **`casual`** — Slack, internal notes; only catch the worst offenders.
-- **`code`** — source files, diffs, commit messages, PR descriptions, tests. Turns on the code-and-repository-artifacts patterns (#61-68) and turns off prose-only rules that do not apply to code: sentence-length rhythm, copula avoidance, rule of three, transition phrases, paragraph-length uniformity, and TTR stylometry. Em-dash and inflated-vocabulary rules still apply, but only to prose surfaces (comments, commit bodies, PR text), not to identifiers or string literals. The two logic-touching patterns (#65, #67) are flag-only here: report and propose, never auto-cut.
+- **`code`** — source files, diffs, commit messages, PR descriptions, tests. Turns on the code-and-repository-artifacts patterns (#80-87) and turns off prose-only rules that do not apply to code: sentence-length rhythm, copula avoidance, rule of three, transition phrases, paragraph-length uniformity, and TTR stylometry. Em-dash and inflated-vocabulary rules still apply, but only to prose surfaces (comments, commit bodies, PR text), not to identifiers or string literals. The two logic-touching patterns (#84, #86) are flag-only here: report and propose, never auto-cut.
 
 ### Auto-detection cues
 
@@ -66,6 +66,15 @@ Rules not listed apply at full strength everywhere.
 | Transition phrases | skip | strict | strict | strict | relaxed | skip |
 | Generic conclusions | skip | strict | strict | extra strict | skip | skip |
 | Hashtag stuffing | strict | strict | strict | extra strict | skip | skip |
+| Social endorsement closers | strict | strict | strict | strict | skip | relaxed (1 OK in a DM) |
+| Tier 3 phrase clustering | relaxed | strict | relaxed | strict | relaxed | skip |
+| Future-narrative closers | relaxed | strict | strict | extra strict | skip | skip |
+| Moral-adjective category errors | strict | strict | strict | strict | strict | relaxed |
+| Invented contrast-pair mirroring | strict | strict | strict | strict | relaxed | skip |
+| Subjectless fragments and agentless passives | relaxed | strict | relaxed | strict | skip (fragments are the form) | skip |
+| Real/actual inflation | strict | strict | strict | strict | relaxed | skip |
+| Launch-copy introductions | relaxed (1 hook) | strict | strict | strict | strict | skip |
+| Unnecessary hyphenation | relaxed | strict | strict | strict | strict | skip |
 
 **Technical-blog vocabulary exceptions:** these have legitimate technical meaning
 and should not be flagged in technical context: `robust`, `comprehensive`,

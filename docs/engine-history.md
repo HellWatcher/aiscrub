@@ -9,8 +9,8 @@ a `see docs/engine-history.md#…` pointer left in the source.
 ## AI-tool fingerprints
 
 The three AI-tool fingerprint detectors (`ai-placeholder`, `ai-citation-markup`,
-`ai-utm-source`) were adapted from Aboudjem/humanizer-skill P33-P35 — see
-`docs/competitive/audits/2026-05-17-aboudjem-humanizer-skill.md`. Unlike the
+`ai-utm-source`) were adapted from Aboudjem/humanizer-skill P33-P35, found in a
+May 2026 audit of that skill upstream (the audit notes were not vendored). Unlike the
 statistical patterns, a single hit on any of these is strong evidence because
 the AI tool literally left its fingerprint in the text.
 
@@ -46,8 +46,9 @@ reflects the same signals the user actually sees.
 - Punctuation-distribution: the `CV < 0.25` cross-paragraph threshold is
   derived from stylometry papers (arxiv 2507.00838).
 - Type-token ratio (low-TTR) is the simplest of the four stylometric signals
-  identified in the May 2026 detection-research review
-  (`docs/competitive/detection-research.md`): no POS tagger, no model, pure JS.
+  identified in the May 2026 detection-research review upstream (not vendored;
+  the surviving note is `docs/research/metaphor-density.md`): no POS tagger, no
+  model, pure JS.
   The detector-research lens flagged TTR as one of four stylometric add-ons;
   POS-bigram log-odds, function-word z-scores, and sentence-length burstiness
   are still TODO.

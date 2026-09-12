@@ -71,7 +71,7 @@ writing. Act on the signal; do not use it to ruin someone's day.
 - Over-defensive ceremony and TODO theater (flagged, never auto-cut)
 
 Inflated vocabulary is flagged in three tiers (always / in clusters / by density)
-to keep ordinary words from getting gutted. The full catalog runs to 68 patterns.
+to keep ordinary words from getting gutted. The full catalog runs to 87 patterns.
 
 ## The scoring gate
 
@@ -133,7 +133,7 @@ punctuation instead of producing generic clean copy.
 aiscrub/
 ├── SKILL.md              # orchestrator: modes, the calibrate -> rewrite -> audit -> score loop
 ├── references/
-│   ├── patterns.md       # the detection catalog (68 patterns, tiered vocab)
+│   ├── patterns.md       # the detection catalog (87 patterns, tiered vocab)
 │   ├── scoring.md        # the scoring gate, the detector, and severity triage
 │   ├── profiles.md       # context + voice profiles and the tolerance matrix
 │   ├── catalog-map.md    # which patterns the detector backs vs. judgment-only
@@ -185,8 +185,12 @@ maintained by WikiProject AI Cleanup.
 
 The mirrors stay current through
 [`.github/workflows/sync-mirrors.yml`](.github/workflows/sync-mirrors.yml),
-which fetches each upstream daily and force-updates its mirror branch. Trigger
-it by hand any time from the Actions tab.
+which fetches each upstream daily and writes a snapshot commit of its tree to
+the mirror branch. The snapshot drops `.github/workflows` (the default
+`GITHUB_TOKEN` cannot push workflow files, and two upstreams ship them) and
+records the upstream SHA in an `Upstream-Commit:` trailer, so each mirror is a
+linear history of upstream states rather than the upstream commits themselves.
+Trigger it by hand any time from the Actions tab.
 
 ## License
 
