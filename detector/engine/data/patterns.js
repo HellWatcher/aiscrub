@@ -481,6 +481,23 @@ const UNNECESSARY_HYPHENATION = [
   },
 ];
 
+// ─── Colon reveals ─────────────────────────────────────────────────
+// Sourced from petergyang/no-ai-slop (MIT). A determiner-led noun phrase,
+// a colon, then a lowercase dramatic reveal: "The detail that makes it
+// work: a separate agent grades it." Catalog 52 already covers the
+// interrogative hook ("The catch?"); this is the declarative twin.
+//
+// Narrow on purpose. Requiring a leading determiner keeps bare labels
+// ("Note:", "Usage:", "Requirements:") and dialogue attributions
+// ("Ferrik: ...") out with no extra list to maintain, and the colon can
+// only be the first one on the line because the middle class excludes it.
+// The clause after the colon must start lowercase, which is what
+// separates a reveal from a heading or a proper-noun subtitle. Line
+// shape, code, and genuine enumerations are filtered in
+// passes/colon-reveal.js, not here.
+const COLON_REVEAL =
+  /(?:^|(?<=[.!?]\s))((?:The|This|That|A|An|One|My|Our|Your|Their|Its|His|Her|What)\s[^.!?:;,\n]{1,60}[A-Za-z0-9)"'])[ \t]*:[ \t]+([a-z][^.!?\n]{2,160})/gm;
+
 module.exports = {
   TRANSITIONS,
   CHATBOT_ARTIFACTS,
@@ -521,4 +538,5 @@ module.exports = {
   NEGATION_CHAIN,
   DEV_BLOG_BOILERPLATE,
   UNNECESSARY_HYPHENATION,
+  COLON_REVEAL,
 };

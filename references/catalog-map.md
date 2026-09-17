@@ -1,6 +1,6 @@
 # Catalog ↔ detector map
 
-Which of the 87 catalog patterns the deterministic engine (`detector/patterns.js`)
+Which of the 88 catalog patterns the deterministic engine (`detector/patterns.js`)
 can score, and which are judgment-only. This is the AIScrub-level view; the
 engine's own internal contract (detector `type` ↔ engine label) lives in
 [../detector/CATEGORIES.md](../detector/CATEGORIES.md).
@@ -8,7 +8,7 @@ engine's own internal contract (detector `type` ↔ engine label) lives in
 Three reasons a pattern is judgment-only: it needs reading for meaning (synonym
 cycling, copula avoidance), it is a writer-side test rather than a string match
 (treadmill, paragraph reshuffle), or it lives in code rather than prose
-(patterns 60 and 80-87). Absence from the detector is not a coverage gap; it is
+(patterns 60 and 81-88). Absence from the detector is not a coverage gap; it is
 a rule a regex should not try to make.
 
 ## Detector-backed (direct)
@@ -48,6 +48,7 @@ The engine scores these with a dedicated `type`:
 | 66 Fake-casual props | `fake-casual-prop` |
 | 67 Performed-insight phrases | `performed-insight` |
 | 68 Dev-blog boilerplate | `dev-blog-boilerplate` |
+| 80 Colon reveals | `colon-reveal` |
 
 ## Detector-backed (partial)
 
@@ -96,5 +97,5 @@ opener, 71 wall-of-text replies (tried and reverted: fires on any short
 paragraph), 72 aphorism formulas, 73 arguing with no one, 74 vague connection,
 75 moral-adjective category errors, 76 invented contrast-pair mirroring, 77
 historical analogy stacking, 78 transformation crutch, 79 same-opener sentence
-runs, and **60 and 80-87** (rejected-alternative commentary and the whole
+runs, and **60 and 81-88** (rejected-alternative commentary and the whole
 code-and-repository-artifacts section).

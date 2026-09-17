@@ -6,7 +6,7 @@ add a rule to the catalog, decide here whether it's regex-detectable (give it a
 detector `type`) or LLM-only judgment (mark it so). When you add a detector
 `type`, point it back at the catalog section it enforces.
 
-The engine exposes 55 issue `type`s (see `TYPE_LABELS` in `patterns.js`). The
+The engine exposes 56 issue `type`s (see `TYPE_LABELS` in `patterns.js`). The
 catalog has more `###` sections than that — the gap is **not** missing coverage,
 it's rules that are judgment calls a regex can't make. The three groups below
 account for every entry on both sides.
@@ -65,6 +65,7 @@ tests with no detectable form). The
 | `fake-casual-prop`                      | Fake-casual prop                             | Fake-casual props                              |
 | `performed-insight`                     | Performed-insight phrase                     | Performed-insight phrases                      |
 | `dev-blog-boilerplate`                  | Dev-blog boilerplate                         | Dev-blog boilerplate                           |
+| `colon-reveal`                          | Colon reveal                                 | Colon reveals                                  |
 | `tier1-clarity`                         | Wordiness                                    | Inflated vocabulary (tiered) — _partial_       |
 | `negation-chain`                        | Negation chain                               | Negative listing — _partial_                   |
 | `unnecessary-hyphenation`               | Unnecessary hyphenation                      | Hyphenated word-pair overuse — _partial_       |

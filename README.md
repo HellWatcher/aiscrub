@@ -71,7 +71,7 @@ writing. Act on the signal; do not use it to ruin someone's day.
 - Over-defensive ceremony and TODO theater (flagged, never auto-cut)
 
 Inflated vocabulary is flagged in three tiers (always / in clusters / by density)
-to keep ordinary words from getting gutted. The full catalog runs to 87 patterns.
+to keep ordinary words from getting gutted. The full catalog runs to 88 patterns.
 
 ## The scoring gate
 
@@ -133,7 +133,7 @@ punctuation instead of producing generic clean copy.
 aiscrub/
 ├── SKILL.md              # orchestrator: modes, the calibrate -> rewrite -> audit -> score loop
 ├── references/
-│   ├── patterns.md       # the detection catalog (87 patterns, tiered vocab)
+│   ├── patterns.md       # the detection catalog (88 patterns, tiered vocab)
 │   ├── scoring.md        # the scoring gate, the detector, and severity triage
 │   ├── profiles.md       # context + voice profiles and the tolerance matrix
 │   ├── catalog-map.md    # which patterns the detector backs vs. judgment-only
@@ -178,6 +178,12 @@ repository:
 - `conorbronsdon/avoid-ai-writing` — the tiered vocabulary, context/voice
   profiles, severity triage, and the vendored detector engine (`detector/`).
   Mirrored on the **`mirror/avoid-ai-writing`** branch.
+
+One rule comes from outside that merge: pattern 80 (colon reveals) is sourced
+from [`petergyang/no-ai-slop`](https://github.com/petergyang/no-ai-slop) (MIT),
+which names the declarative colon-reveal shape this catalog had only covered in
+its interrogative form (#52). A single-rule borrow, so it carries no mirror
+branch.
 
 The pattern catalog ultimately draws on
 [Wikipedia: Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing),

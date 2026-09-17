@@ -300,7 +300,7 @@ List items that start with a bold header and a colon.
 **Before:** - **Performance:** Performance improved through optimized algorithms.
 **After:** The update speeds up load times through optimized algorithms.
 
-A sibling tell: list labels that end in a period instead of a colon ("- **Performance.** Improved through..."), the same inline-header list with different punctuation. Same fix.
+List labels that end in a period instead of a colon are a sibling tell ("- **Performance.** Improved through..."), the same inline-header list with different punctuation. Same fix.
 
 ### 38. Title case in headings
 AI capitalizes every main word.
@@ -476,6 +476,9 @@ Relabeling without explaining: "X is no longer a Y; it's a Z", "this turns X int
 ### 79. Same-opener sentence runs
 Three or more consecutive sentences opening on the same word ("Maybe nobody needed it. Maybe it solved the wrong problem. Maybe the timing was off."), or built on the same skeleton ("A cart is an object in the system. A chat room is an object in the system."). Deliberate anaphora is a device; models reach for it constantly. Keep the first, then vary or merge the rest. Pronoun-opener runs ("He ... He ... He ...") are ordinary narration and pass.
 
+### 80. Colon reveals
+A noun phrase, a colon, then a lowercase dramatic reveal: "The detail that makes it work: a separate agent grades it.", "The best part: it learns." The colon does the work a sentence should do, and the lowercase clause after it performs a reveal the content has not earned. Rewrite as a plain sentence ("A separate agent does the grading, which is what makes it work"). Colons keep their real jobs: lists, labels, and quotes. Infomercial hooks (#52) are the interrogative twin of this ("The catch?", "The best part?"); this is the declarative one. A full clause before the colon is ordinary punctuation and passes ("The reason it works is simple: nobody touches it"), as does a colon opening onto a genuine list. Sourced from `petergyang/no-ai-slop` (MIT).
+
 ---
 
 ## Code and repository artifacts
@@ -487,11 +490,11 @@ prose-only rules that do not fit code.
 
 One principle sits under all of them: **comment the *why*, not the *what*.** The
 code already states what it does. A comment earns its place only when it captures
-intent, a constraint, a gotcha, or context the code cannot express. Patterns 84
-and 86 touch executable logic, so for those the skill **flags and explains; it
+intent, a constraint, a gotcha, or context the code cannot express. Patterns 85
+and 87 touch executable logic, so for those the skill **flags and explains; it
 never silently cuts.**
 
-### 80. Restating-the-code comments
+### 81. Restating-the-code comments
 Comments that paraphrase the line below them and add nothing.
 
 **Before:**
@@ -504,7 +507,7 @@ Comments that paraphrase the line below them and add nothing.
 
 *Carve-out:* keep it when it explains the why, e.g. `i += 1  // skip the header row`.
 
-### 81. Ceremonial docstrings
+### 82. Ceremonial docstrings
 Doc blocks that fill every slot with the function's own name and types, so the doc says exactly what the signature already says.
 
 **Before:**
@@ -515,16 +518,16 @@ Doc blocks that fill every slot with the function's own name and types, so the d
 
 *Carve-out:* public API docs, non-obvious return contracts, units, side effects, ownership.
 
-### 82. Tutorial comments in production code
+### 83. Tutorial comments in production code
 Explaining the language or a library to an imagined student: "Arrow functions preserve `this`, so we use one here", "We await the promise to get the resolved value". The codebase is not a textbook. Delete them.
 
-### 83. Banner and divider comments
+### 84. Banner and divider comments
 `// ===== HELPERS =====`, `// ---- Main logic ----` used to over-organize a short file. If a file needs banners to navigate, split it rather than decorate it. (Code cousin of #56, excessive structure.)
 
-### 84. Placeholder and TODO theater (flag, don't cut)
+### 85. Placeholder and TODO theater (flag, don't cut)
 Scaffolding shipped as if it were finished work: `// TODO: add validation` on a merged path, `throw new Error("Not implemented")` reachable in production, `const apiKey = "your-api-key-here"`. Code cousin of #45 (unfilled placeholders). Because a TODO can mark real, intentionally-deferred work, **flag it and ask** rather than deleting it; the fix is to do the work or remove the dead stub, and that is the author's call.
 
-### 85. Inflated commit and PR prose
+### 86. Inflated commit and PR prose
 Tier 1 vocabulary (see #3) leaking into repo metadata, plus vague bullet-soup descriptions. State what changed and why, concretely.
 
 **Before:**
@@ -535,8 +538,8 @@ Tier 1 vocabulary (see #3) leaking into repo metadata, plus vague bullet-soup de
 > Lock account after 5 failed logins (was unlimited)
 > Replaces the per-request DB lookup with a 60s cache; cuts auth latency from ~40ms to ~3ms.
 
-### 86. Over-defensive ceremony (flag, don't cut)
+### 87. Over-defensive ceremony (flag, don't cut)
 Try/catch that only rethrows or logs-and-swallows, null guards on values that cannot be null, parameters added "just in case", a `let result = ...; return result;` two-step. This **edits executable logic**, and a guard sometimes protects a real edge case the author hit once at 3am. So the skill **reports the smell and proposes the change**; it does not remove a guard on its own. Treat it like #60's carve-out: assume a check may be load-bearing until shown otherwise.
 
-### 87. Vacuous tests and over-described test names
+### 88. Vacuous tests and over-described test names
 Tautological assertions (`expect(true).toBe(true)`), tests that only assert a mock was called with what you fed the mock, and names like `it("should successfully return the correct value given valid input under normal conditions")`. Test the behavior, and name the test for that behavior: `it("locks the account after 5 failed logins")`.

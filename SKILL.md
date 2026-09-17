@@ -1,6 +1,6 @@
 ---
 name: aiscrub
-version: 2.1.0
+version: 2.2.0
 description: |
   Remove the tells of AI-generated writing while keeping the author's voice.
   Use when drafting, editing, reviewing, or auditing prose, or when asked to
@@ -63,7 +63,7 @@ If the writer gives you a sample of their own writing, read it before rewriting.
 
 **Voice profiles** set how the prose should sound: `casual`, `professional`, `technical`, `warm`, `blunt`. **Context profiles** set how strict to be for the audience: `linkedin`, `blog`, `technical-blog`, `investor-email`, `docs`, `casual`, and `code`. They are independent axes (blunt for a blog, warm for docs). Where they govern the same rule and disagree, resolve toward the stricter. If no profile is named, infer from the input and say which you used. Definitions and the per-profile tolerance matrix live in [references/profiles.md](references/profiles.md).
 
-For source, diffs, commits, PRs, and tests, the `code` profile turns on the code-and-repository-artifacts patterns (#80-87 in [references/patterns.md](references/patterns.md)) and relaxes prose-only rules. Patterns that touch executable logic (#84 TODO theater, #86 over-defensive ceremony) are flag-only: report the smell and propose a fix, never silently cut a guard or a deferred-work marker.
+For source, diffs, commits, PRs, and tests, the `code` profile turns on the code-and-repository-artifacts patterns (#81-88 in [references/patterns.md](references/patterns.md)) and relaxes prose-only rules. Patterns that touch executable logic (#85 TODO theater, #87 over-defensive ceremony) are flag-only: report the smell and propose a fix, never silently cut a guard or a deferred-work marker.
 
 ## Personality and soul
 

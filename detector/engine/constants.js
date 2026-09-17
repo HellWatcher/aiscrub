@@ -86,6 +86,11 @@ const ISSUE_WEIGHTS = {
   'performed-insight': 3,
   'negation-chain': 5,
   'dev-blog-boilerplate': 3,
+  // Colon reveals (catalog 80, sourced from petergyang/no-ai-slop).
+  // Weighted like a generic conclusion: one is a tic, a run of them is
+  // the tell. Kept low enough that a terse-but-human "The fix: bump the
+  // timeout" can't push a draft toward an AI verdict on its own.
+  'colon-reveal': 3,
   'speculative-opener': 8,
   'launch-intro': 8,
   'crowd-contrast': 6,
@@ -167,6 +172,7 @@ const TYPE_LABELS = {
   'performed-insight': 'Performed-insight phrase',
   'negation-chain': 'Negation chain',
   'dev-blog-boilerplate': 'Dev-blog boilerplate',
+  'colon-reveal': 'Colon reveal',
 };
 
 // Upper bound for one scan. Above this we bail rather than running all

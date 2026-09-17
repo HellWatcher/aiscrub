@@ -66,3 +66,28 @@ after any non-word char.
 The Tier-3 density threshold is `Math.max(3, floor(wordCount * 0.03))`. The
 previous floor of 1 meant a 50-word text with one "significant" got flagged as
 Tier 3 overuse, which was noise.
+
+## Colon reveals
+
+The rule arrives from `petergyang/no-ai-slop` (MIT) as catalog 80, and the
+detector shipped with it because the shape is a punctuation fact rather than a
+reading-for-meaning call. Four gates keep it off honest colons, and each one
+came from a false positive in this repository's own prose:
+
+- **Leading determiner required.** Does the work a label blocklist would
+  otherwise do: `Note:`, `Usage:`, `Requirements:` and dialogue attributions
+  never start with one, so nothing has to be enumerated or maintained.
+- **No auxiliary or modal in the phrase.** `A colon flag is advisory only:
+  surface the alternative` is an independent clause plus colon, which is
+  ordinary punctuation. The auxiliary/modal-only test (borrowed from the
+  bullet-NP pass) rejects it while leaving `The detail that makes it work:`
+  alone, because a relative clause's verb is not on that list.
+- **Structural lines skipped.** Headings, list items, and table rows use colons
+  as labels; the inline-header list is catalog 37's rule, not this one.
+- **Enumerations skipped.** Two commas, or a comma before a conjunction, means
+  the colon introduced a list.
+
+Measured after the gates: zero hits across README.md, STANDARDS.md,
+detector/README.md, CATEGORIES.md, scoring.md, catalog-map.md and SKILL.md, one
+true hit in patterns.md (catalog 37's own prose, since rewritten), and no change
+to the eval corpus false-positive rate.

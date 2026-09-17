@@ -17,6 +17,7 @@ const { runNormalizationFlagPass } = require('./passes/normalization-flag');
 const { runStylometryPass } = require('./passes/stylometry');
 const { runStructuralPass } = require('./passes/structural');
 const { findUnnecessaryHyphenation } = require('./passes/hyphenation');
+const { runColonRevealPass } = require('./passes/colon-reveal');
 
 // ═══ Main analysis ═════════════════════════════════════════════════
 // Orchestrates the pre-pass (blockquote strip → normalize → word-count
@@ -110,6 +111,7 @@ function analyzeText(text, options = {}) {
   issues.push(...runStylometryPass({ text, wordCount, tokens, paragraphs, sentences }));
   issues.push(...runStructuralPass({ text, wordCount }));
   issues.push(...findUnnecessaryHyphenation(text));
+  issues.push(...runColonRevealPass({ text }));
 
   // Echo (close word/root repetition) — flag-only, P2, weight 0 (see
   // ISSUE_WEIGHTS.echo) so it never moves the AI-origin score.

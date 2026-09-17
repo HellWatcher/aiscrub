@@ -15,6 +15,7 @@ const files = [
   './newer-phrases.test.js',
   './newer-phrases-negative.test.js',
   './structural.test.js',
+  './colon-reveal.test.js',
   './stylometry.test.js',
   './normalization.test.js',
   './trinary.test.js',
