@@ -66,3 +66,7 @@ after any non-word char.
 The Tier-3 density threshold is `Math.max(3, floor(wordCount * 0.03))`. The
 previous floor of 1 meant a 50-word text with one "significant" got flagged as
 Tier 3 overuse, which was noise.
+
+## ai-citation-markup and the `:::writing` fence
+
+The `:::writing` fence was dropped from the ai-citation-markup regex (critical weight 15): `:::name` is standard admonition syntax and upstream never shipped that marker. The catalog keeps it as a judgment cue. Related quirk: `tier1-clarity` flags the noun "features" (upstream-faithful); the negative test avoids the word instead of adding verb-position gating (2026-09-11).
